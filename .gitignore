@@ -3,3 +3,14 @@
 ################################################################################
 
 /test/Debug
+/.vs
+/agsw/Debug
+/agsw/agsw/x64/Debug
+/agsw/agsw/Log.txt
+/agsw/agsw/Debug
+/agsw/agsw/agsw.vcxproj.user
+/agsw/agsw/agsw.vcxproj.filters
+/agsw/agsw/agsw.vcxproj
+/agsw/agsw/agsw.cpp
+/agsw/agsw.sln
+/agsw/.vs/agsw/v16
