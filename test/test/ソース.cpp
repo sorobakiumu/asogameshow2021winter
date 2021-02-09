@@ -33,7 +33,7 @@ namespace {
 	float downpt = 400;
 	float gravity = 0.5f;
 }
-float GetRadian(Vector2& up, Vector2& down);
+float GetRadian(std::pair<Vector2, Vector2>);
 void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos) {
 	auto up = hillPos.first;
 	auto down = hillPos.second;
@@ -43,7 +43,7 @@ void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos
 		down = hillPos.first;
 	}
 
-	auto radian = GetRadian(up, down);
+	auto radian = GetRadian(hillPos);
 
 	auto xvec = 0.5f;
 	if (up.x > down.x) {
@@ -54,8 +54,15 @@ void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos
 
 }
 
-float GetRadian(Vector2& up, Vector2& down)
+float GetRadian(std::pair<Vector2, Vector2> hillPos)
 {
+	auto up = hillPos.first;
+	auto down = hillPos.second;
+
+	if (hillPos.second.y < hillPos.first.y) {
+		up = hillPos.second;
+		down = hillPos.first;
+	}
 	return atan2(up.y - down.y, up.x - down.x);
 }
 
@@ -92,7 +99,7 @@ void bam(void)
 			if (!zff)
 			{
 
-				auto hillflt = GetRadian(HillPositions[0].first, HillPositions[0].second);
+				auto hillflt = GetRadian(HillPositions[0]);
 				ve->y = 10 * (100 * neuVec.y / 60 + static_cast<float>(9.8f * neuVec.y / 60) * 2 / 2) / 10;
 				ve->x--;
 				neuVec.y++;
@@ -105,7 +112,7 @@ void bam(void)
 				if (neuVec.y < 30)
 				{
 					neuVec.y++;
-					auto hillflt = GetRadian(HillPositions[0].first, HillPositions[0].second);
+					auto hillflt = GetRadian(HillPositions[0]);
 					ve->y = -0.5 * (1 * neuVec.y + static_cast<float>(9.8f * neuVec.y) * 2 / 2) / 30;
 					ve->x = -0.5;
 
