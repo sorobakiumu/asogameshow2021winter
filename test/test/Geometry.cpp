@@ -68,7 +68,12 @@ operator%(const Vector2& va, const Vector2& vb) {
 }
 
 
-void 
+Vector2 Vector2::abs()
+{
+	return Vector2(std::abs(x), std::abs(y));
+}
+
+void
 Vector2::operator+=(const Vector2& v) {
 	x += v.x;
 	y += v.y;
