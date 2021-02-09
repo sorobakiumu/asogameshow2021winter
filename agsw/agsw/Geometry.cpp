@@ -21,6 +21,13 @@ Vector2 operator-(const Vector2& va, const Vector2 vb){
 	return Vector2(va.x - vb.x, va.y - vb.y);
 }
 
+Vector2 operator/(const Vector2& va, const float vb)
+{
+	if (vb == 0)
+		return{ 0 ,0 };
+	return Vector2(va.x / vb, va.y / vb);
+}
+
 float
 Vector2::Magnitude()const {
 	return hypot(x, y);

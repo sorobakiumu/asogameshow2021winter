@@ -33,7 +33,7 @@ namespace {
 	float downpt = 400;
 	float gravity = 0.5f;
 }
-float GetRadian(Vector2& up, Vector2& down);
+float GetRadian(std::pair<Vector2, Vector2>);
 void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos) {
 	auto up = hillPos.first;
 	auto down = hillPos.second;
@@ -43,7 +43,7 @@ void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos
 		down = hillPos.first;
 	}
 
-	auto radian = GetRadian(up, down);
+	auto radian = GetRadian(hillPos);
 
 	auto xvec = 0.5f;
 	if (up.x > down.x) {
@@ -54,8 +54,15 @@ void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos
 
 }
 
-float GetRadian(Vector2& up, Vector2& down)
+float GetRadian(std::pair<Vector2, Vector2> hillPos)
 {
+	auto up = hillPos.first;
+	auto down = hillPos.second;
+
+	if (hillPos.second.y < hillPos.first.y) {
+		up = hillPos.second;
+		down = hillPos.first;
+	}
 	return atan2(up.y - down.y, up.x - down.x);
 }
 
@@ -78,43 +85,98 @@ void PinInit();
 
 
 bool zff = false;
-Vector2 neuVec = {0,0};
+Vector2 neuVec = { 0,0 };
+int neuCon = 0;
+float powP=40;
+
+Vector2 RefLectVec(const Vector2& i, const Vector2& n)
+{
+	//反射ベクトルの式
+	//R=I-2*（N・I）N
+	//をそのままプログラムにする
+	//ただし、オペレーターオーバーロード
+	//の関係で
+	//
+	Vector2 r = i - Vector2(n.x * (Dot(i, n) * 2), n.y * (Dot(i, n) * 2));
+	return r;
+}
 
 void bam(void)
 {
+	if (CheckHitKey(KEY_INPUT_UP))
+	{
+		powP += 0.5;
+		if (powP > 100)
+		{
+			powP = 100;
+		}
+		printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
+	}
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		powP -= 0.5;
+		if (powP < 0)
+		{
+			powP = 0;
+		}
+		printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
+	}
+	
 	for (auto b : bolls)
 	{
-		///初速*時間+(重力加速度*時間)/2
-		//tmpvec.y += -2 * (100 * bulletCon_[i] / 60 + static_cast<float>(S_GRAVITY * bulletCon_[i] / 60) * 2 / 2);
 		auto* ve = &b->vec_;
-		if (CheckHitKey(KEY_INPUT_Z))
-		{
-			if (!zff)
-			{
 
-				auto hillflt = GetRadian(HillPositions[0].first, HillPositions[0].second);
-				ve->y = 10 * (100 * neuVec.y / 60 + static_cast<float>(9.8f * neuVec.y / 60) * 2 / 2)/10;
-				ve->x--;
-				neuVec.y++;
-			}
+		if (CheckHitKey(KEY_INPUT_Z) && !zff)
+		{
+			auto hillflt = GetRadian(HillPositions[0]);
+			//float momentX = (float)(Math.Sin(radian) * 0.1);
+			//float momentZ = (float)(Math.Cos(radian) * 0.1);
+			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
+			//if (rand() % 2 == 0)
+				neuVec.x -= powP;
+			tvec.Normalized();
+			auto rtvec = RefLectVec(neuVec, tvec);
 			zff = true;
+			neuVec = rtvec / 10;
+			neuVec.x *= 2;
+			neuCon++;
+		}
+		else if (CheckHitKey(KEY_INPUT_X) && !zff)
+		{
+			auto hillflt = GetRadian(HillPositions[0]);
+			//float momentX = (float)(Math.Sin(radian) * 0.1);
+			//float momentZ = (float)(Math.Cos(radian) * 0.1);
+			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
+			//if (rand() % 2 == 0)
+			neuVec.x = -powP;
+			tvec.Normalized();
+			auto rtvec = RefLectVec(neuVec, tvec);
+			zff = true;
+			neuVec = rtvec / 10;
+			if (neuVec.x < 0)
+				neuVec.x *= -1;
+			neuVec.x *= 2;
+			neuCon++;
 		}
 		else
 		{
-			if (neuVec.y != 0)
-				if (neuVec.y < 30)
+			if(neuCon == 0)
+			{
+				neuVec = { 0,0 };
+				zff = false;
+			}
+			else
+			{
+				if (neuCon/2 < 5)
 				{
-					neuVec.y++;
-					auto hillflt = GetRadian(HillPositions[0].first, HillPositions[0].second);
-					ve->y = -0.5 * (1 * neuVec.y + static_cast<float>(9.8f * neuVec.y) * 2 / 2)/30;
-					ve->x = -0.5;
-
+					*ve = neuVec;
+					neuCon++;
 				}
 				else
 				{
-					neuVec = { 0,0 };
-					zff = false;
+					neuCon = 0;
 				}
+			}
 		}
 	}
 }
@@ -137,7 +199,7 @@ int main()
 	{
 		//移動入力情報
 		key = CheckHitKey(KEY_INPUT_SPACE);
-		if(!balF)
+		if (!balF)
 			if ((key == true) && (oldkey == true)) {
 				bolls.emplace_back(new Boll({ downpt,1.0f }));
 				balF = true;
@@ -189,15 +251,18 @@ int main()
 		DrawCircle(downpt, 20, 20, 0x000000, false, true);
 		//坂の描画
 		for (auto h : HillPositions) {
-			DrawLine(h.first.x,h.first.y,h.second.x,h.second.y,0x000000);
+			DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
 		}
 		//ピンの描画
 		//for (auto p : pinPositions) {
 		//	DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
 		//}
+		DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 		ScreenFlip();
 		//ボールの更新
 		bam();
+
+
 		for (auto b : bolls) {
 			b->updata();
 			if (b->pos_.x - b->r < xoffset) {
