@@ -133,10 +133,7 @@ void bam(int pow = powP)
 		if (CheckHitKey(KEY_INPUT_Z) && !zff)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
-			//float momentX = (float)(Math.Sin(radian) * 0.1);
-			//float momentZ = (float)(Math.Cos(radian) * 0.1);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			//if (rand() % 2 == 0)
 			neuVec.x -= powP;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
@@ -148,10 +145,7 @@ void bam(int pow = powP)
 		else if (CheckHitKey(KEY_INPUT_X) && !zff)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
-			//float momentX = (float)(Math.Sin(radian) * 0.1);
-			//float momentZ = (float)(Math.Cos(radian) * 0.1);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			//if (rand() % 2 == 0)
 			neuVec.x = -powP;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
@@ -166,7 +160,6 @@ void bam(int pow = powP)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-
 			neuVec.y -= pow;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
@@ -197,7 +190,6 @@ void bam(int pow = powP)
 		}
 	}
 }
-
 
 void pinIshit(std::shared_ptr<Boll>& boll);
 
@@ -282,7 +274,6 @@ int main()
 			}
 		}
 	}
-
 }
 void pinIshit(std::shared_ptr<Boll>& boll)
 {
