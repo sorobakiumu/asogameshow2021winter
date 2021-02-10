@@ -2,12 +2,12 @@
 
 //2D座標・ベクトルを表す構造体
 struct Vector2 {
-	Vector2():x(0),y(0){}
-	Vector2(float inx,float iny):x(inx),y(iny){}
+	Vector2() :x(0), y(0) {}
+	Vector2(float inx, float iny) :x(inx), y(iny) {}
 	float x, y;
 	///ベクトルの大きさを返します
 	float Magnitude()const;
-	
+
 	///正規化(大きさを１に)します
 	void Normalize();
 
