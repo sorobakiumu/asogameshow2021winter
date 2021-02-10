@@ -182,6 +182,8 @@ void bam(void)
 }
 
 
+void pinIshit(std::shared_ptr<Boll>& boll);
+
 int main()
 {
 	DxLib::ChangeWindowMode(true);
@@ -217,24 +219,8 @@ int main()
 		for (auto boll : bolls) {
 			boll->vec_.y += gravity;
 			//坂の当たり判定
-			HillIsHit(boll);
-			/*for (auto pin : pinPositions) {
-				if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
-					auto distance = pin - boll->pos_;
-					if (distance.x == 0) {
-						distance.x = (std::rand() % 2) * 2 - 1;
-					}
-					auto vec = boll->vec_;
-					vec.x += distance.x * -0.1;
-					vec.y = distance.y * -0.1;
-					auto pos = boll->pos_ + vec;
-					if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
-
-					}
-
-
-				}
-			}*/
+			//HillIsHit(boll);
+			pinIshit(boll);
 		}
 
 		ClearDrawScreen();
@@ -254,9 +240,9 @@ int main()
 			DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
 		}
 		//ピンの描画
-		//for (auto p : pinPositions) {
-		//	DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
-		//}
+		for (auto p : pinPositions) {
+			DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
+		}
 		DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 		ScreenFlip();
 		//ボールの更新
@@ -280,6 +266,28 @@ int main()
 		}
 	}
 
+}
+void pinIshit(std::shared_ptr<Boll>& boll)
+{
+	for (auto pin : pinPositions) {
+		if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
+			auto distance = pin - boll->pos_;
+			if (distance.x == 0) {
+				distance.x = (std::rand() % 2) * 2 - 1;
+			}
+			auto vec = boll->vec_;
+			boll->vec_.x += distance.x * -0.1;
+			boll->vec_.y = distance.y * -0.1;
+			
+
+			//auto pos = boll->pos_ + vec;
+			//if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
+
+			//}
+
+
+		}
+	}
 }
 //ピンの初期化
 void PinInit()
