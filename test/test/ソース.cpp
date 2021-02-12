@@ -11,7 +11,7 @@ class Boll {
 public:
 	Vector2 pos_;
 	Vector2 vec_;
-	float r = 20;
+
 	Boll(Vector2 pos) {
 		pos_ = pos;
 		vec_ = {};
@@ -66,13 +66,25 @@ float GetRadian(std::pair<Vector2, Vector2> hillPos)
 	return atan2(up.y - down.y, up.x - down.x);
 }
 
-
+float bollR = 20;
+float hollR = bollR + 5;
 std::pair<Vector2, Vector2> HillPositions[] = {
-	{{xoffset + xgameScreen,130} ,{400,110}},
+	{{xoffset + xgameScreen,90} ,{400,70}},
+	{{xoffset+ hollR *2,90} ,{320,70}},
 	{{xoffset,220}, {400,200}},
-	{{xoffset + xgameScreen,330} ,{400,300}},
+	{{400+hollR*2,200}, {xoffset + xgameScreen-hollR*2,180}},
+	{{xoffset + xgameScreen,330} ,{xoffset+hollR*5,300}},
 	{{xoffset,420} ,{400,400}}
 };
+Vector2 hollPosition[] = {
+	{xoffset + hollR, 90},
+	{xoffset + xgameScreen - hollR,180 } ,
+	{xoffset + hollR,300 } };
+
+std::pair<Vector2, Vector2> wallPositions[] = {
+	{{xoffset + xgameScreen,90} ,{400,70}},
+};
+
 
 const float pinsize = 2.5f;
 const int startnum = 7;
@@ -184,6 +196,8 @@ void bam(void)
 
 void pinIshit(std::shared_ptr<Boll>& boll);
 
+void hollIsHit(std::shared_ptr<Boll>& boll, bool& balF);
+
 int main()
 {
 	DxLib::ChangeWindowMode(true);
@@ -194,7 +208,7 @@ int main()
 	ClsDrawScreen();
 
 	//ピンの初期化
-	PinInit();
+	//PinInit();
 
 	bool balF = false;
 	while (true)
@@ -219,8 +233,9 @@ int main()
 		for (auto boll : bolls) {
 			boll->vec_.y += gravity;
 			//坂の当たり判定
-			//HillIsHit(boll);
+			HillIsHit(boll);
 			pinIshit(boll);
+			hollIsHit(boll, balF);
 		}
 
 		ClearDrawScreen();
@@ -230,8 +245,8 @@ int main()
 		//ボールの描画
 		for (auto b : bolls) {
 			auto color = 0xff0000;
-			DrawCircle(b->pos_.x, b->pos_.y, b->r, color, true, true);
-			DrawCircle(b->pos_.x, b->pos_.y, b->r, 0x000000, false, true);
+			DrawCircle(b->pos_.x, b->pos_.y, bollR, color, true, true);
+			DrawCircle(b->pos_.x, b->pos_.y, bollR, 0x000000, false, true);
 		}
 		//打ちだし場所の描画(デバッグ用)
 		DrawCircle(downpt, 20, 20, 0x000000, false, true);
@@ -243,6 +258,10 @@ int main()
 		for (auto p : pinPositions) {
 			DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
 		}
+		//穴の描画
+		for (auto p : hollPosition) {
+			DrawCircle(p.x, p.y, hollR, 0x000000, true, true);
+		}
 		DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 		ScreenFlip();
 		//ボールの更新
@@ -251,11 +270,11 @@ int main()
 
 		for (auto b : bolls) {
 			b->updata();
-			if (b->pos_.x - b->r < xoffset) {
-				b->pos_.x = xoffset + b->r;
+			if (b->pos_.x - bollR < xoffset) {
+				b->pos_.x = xoffset + bollR;
 			}
-			else if (b->pos_.x + b->r > xoffset + 400) {
-				b->pos_.x = xoffset + 400 - b->r;
+			else if (b->pos_.x + bollR > xoffset + 400) {
+				b->pos_.x = xoffset + 400 - bollR;
 			}
 		}
 		for (auto b : bolls) {
@@ -267,10 +286,22 @@ int main()
 	}
 
 }
+void hollIsHit(std::shared_ptr<Boll>& boll, bool& balF)
+{
+	for (auto holl : hollPosition) {
+		if (boll->pos_.x + bollR * 2 < holl.x + hollR * 2 &&
+			boll->pos_.x - bollR * 2 > holl.x - hollR * 2 &&
+			boll->pos_.y + bollR * 2 < holl.y + hollR * 2 &&
+			boll->pos_.y - bollR * 2 > holl.y - hollR * 2) {
+			bolls.clear();
+			balF = false;
+		}
+	}
+}
 void pinIshit(std::shared_ptr<Boll>& boll)
 {
 	for (auto pin : pinPositions) {
-		if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
+		if ((boll->pos_ - pin).Magnitude() <= (bollR + pinsize)) {
 			auto distance = pin - boll->pos_;
 			if (distance.x == 0) {
 				distance.x = (std::rand() % 2) * 2 - 1;
@@ -313,16 +344,20 @@ void HillIsHit(std::shared_ptr<Boll>& boll)
 		auto hillnorm = (hillpos.second - hillpos.first).Normalized();
 		auto b = boll->pos_ - hillpos.first;
 		auto P = hillpos.first + hillnorm * (hillnorm * b);
-		if ((boll->pos_ - P).Magnitude() < boll->r) {
+		if ((boll->pos_ - P).Magnitude() < bollR) {
 			auto A = boll->pos_ - hillpos.second;
 			auto B = hillpos.first - hillpos.second;
 			auto S = boll->pos_ - hillpos.first;
 			if ((A * S) * (B * S) >= 0)
 			{
-				boll->alive = false;
-				boll->vec_.y = 0;
-				boll->pos_.y = P.y - boll->r;
-				gPosChange(boll, hillpos);
+				auto right = max(hillpos.first.x, hillpos.second.x);
+				auto left = min(hillpos.first.x, hillpos.second.x);
+				if (right > boll->pos_.x && left < boll->pos_.x) {
+					boll->alive = false;
+					boll->vec_.y = 0;
+					boll->pos_.y = P.y - bollR;
+					gPosChange(boll, hillpos);
+				}
 			}
 		}
 		else {
