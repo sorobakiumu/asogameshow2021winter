@@ -80,3 +80,71 @@ Vector2::operator-=(const Vector2& v) {
 	x -= v.x;
 	y -= v.y;
 }
+
+
+void
+Vector3::operator*=(float scale) {
+	x *= scale;
+	y *= scale;
+	z *= scale;
+}
+
+Vector3 Vector3::operator*(float scale)
+{
+	return Vector3(x * scale, y * scale, z * scale);
+}
+
+Vector3 operator+(const Vector3& va, const Vector3 vb) {
+	return Vector3(va.x + vb.x, va.y + vb.y, va.z + vb.z);
+}
+
+Vector3 operator-(const Vector3& va, const Vector3 vb) {
+	return Vector3(va.x - vb.x, va.y - vb.y, va.z - vb.z);
+}
+
+float
+Vector3::Magnitude()const {
+	return sqrt(x * x + y * y + z * z);
+}
+
+
+void
+Vector3::Normalize() {
+	float mag = Magnitude();
+	x /= mag;
+	y /= mag;
+	z /= mag;
+}
+
+
+Vector3
+Vector3::Normalized() {
+	float mag = Magnitude();
+	return Vector3(x / mag, y / mag, z / mag);
+}
+
+
+///ì‡êœÇï‘Ç∑
+float
+Dot(const Vector3& va, const Vector3& vb) {
+	return va.x * vb.x + va.y * vb.y + va.z * vb.z;
+}
+
+///ì‡êœââéZéq
+float
+operator*(const Vector3& va, const Vector3& vb) {
+	return Dot(va, vb);
+}
+
+void
+Vector3::operator+=(const Vector3& v) {
+	x += v.x;
+	y += v.y;
+	z += v.z;
+}
+void
+Vector3::operator-=(const Vector3& v) {
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+}

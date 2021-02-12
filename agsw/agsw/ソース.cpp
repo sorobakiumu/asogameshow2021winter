@@ -6,6 +6,7 @@
 #include "Geometry.h"
 #include <cmath>
 #include <random>
+#include "JankenPon.h"
 
 class Boll {
 public:
@@ -206,74 +207,95 @@ int main()
 	PinInit();
 
 	bool balF = false;
-	while (true)
+	JankenPon janken;
+	bool jankF = false;
+	while (ProcessMessage()==0)
 	{
-		//移動入力情報
-		key = CheckHitKey(KEY_INPUT_SPACE);
-		if (!balF)
-			if ((key == true) && (oldkey == true)) {
-				bolls.emplace_back(new Boll({ downpt,1.0f }));
-				balF = true;
-			}
-		if (CheckHitKey(KEY_INPUT_RIGHT))
+		if (!jankF)
 		{
-			downpt += 3;
-		}
-		else if (CheckHitKey(KEY_INPUT_LEFT)) {
-			downpt -= 3;
-		}
-		oldkey = key;
+			if (CheckHitKey(KEY_INPUT_J))
+			{
+				jankF = true;
+			}
+			//移動入力情報
+			key = CheckHitKey(KEY_INPUT_SPACE);
+			if (!balF)
+				if ((key == true) && (oldkey == true)) {
+					bolls.emplace_back(new Boll({ downpt,1.0f }));
+					balF = true;
+				}
+			if (CheckHitKey(KEY_INPUT_RIGHT))
+			{
+				downpt += 3;
+			}
+			else if (CheckHitKey(KEY_INPUT_LEFT)) {
+				downpt -= 3;
+			}
+			oldkey = key;
 
-		//当たり判定
-		for (auto boll : bolls) {
-			boll->vec_.y += gravity;
-			//坂の当たり判定
-			//HillIsHit(boll);
-			pinIshit(boll);
+			//当たり判定
+			for (auto boll : bolls) {
+				boll->vec_.y += gravity;
+				//坂の当たり判定
+				//HillIsHit(boll);
+				pinIshit(boll);
+			}
 		}
-
+		else
+		{
+			janken.RunGame();
+		}
 		ClearDrawScreen();
-		//ゲームエリアの描画
-		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
+		if (!jankF)
+		{
+			//ゲームエリアの描画
+			DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 
-		//ボールの描画
-		for (auto b : bolls) {
-			auto color = 0xff0000;
-			DrawCircle(b->pos_.x, b->pos_.y, b->r, color, true, true);
-			DrawCircle(b->pos_.x, b->pos_.y, b->r, 0x000000, false, true);
+			//ボールの描画
+			for (auto b : bolls) {
+				auto color = 0xff0000;
+				DrawCircle(b->pos_.x, b->pos_.y, b->r, color, true, true);
+				DrawCircle(b->pos_.x, b->pos_.y, b->r, 0x000000, false, true);
+			}
+			//打ちだし場所の描画(デバッグ用)
+			DrawCircle(downpt, 20, 20, 0x000000, false, true);
+			//坂の描画
+			for (auto h : HillPositions) {
+				DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
+			}
+			//ピンの描画
+			for (auto p : pinPositions) {
+				DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
+			}
+			DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
+			//ボールの更新
+			bam();
+
+
+			for (auto b : bolls) {
+				b->updata();
+				if (b->pos_.x - b->r < xoffset) {
+					b->pos_.x = xoffset + b->r;
+				}
+				else if (b->pos_.x + b->r > xoffset + 400) {
+					b->pos_.x = xoffset + 400 - b->r;
+				}
+			}
+			for (auto b : bolls) {
+				if (b->pos_.y > 600) {
+					bolls.clear();
+					balF = false;
+				}
+			}
 		}
-		//打ちだし場所の描画(デバッグ用)
-		DrawCircle(downpt, 20, 20, 0x000000, false, true);
-		//坂の描画
-		for (auto h : HillPositions) {
-			DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
+		else
+		{
+
+			janken.DrawGame();
 		}
-		//ピンの描画
-		for (auto p : pinPositions) {
-			DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
-		}
-		DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 		ScreenFlip();
-		//ボールの更新
-		bam();
-
-
-		for (auto b : bolls) {
-			b->updata();
-			if (b->pos_.x - b->r < xoffset) {
-				b->pos_.x = xoffset + b->r;
-			}
-			else if (b->pos_.x + b->r > xoffset + 400) {
-				b->pos_.x = xoffset + 400 - b->r;
-			}
-		}
-		for (auto b : bolls) {
-			if (b->pos_.y > 600) {
-				bolls.clear();
-				balF = false;
-			}
-		}
 	}
+	delete &janken;
 }
 void pinIshit(std::shared_ptr<Boll>& boll)
 {
