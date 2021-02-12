@@ -96,10 +96,10 @@ void HillIsHit(std::shared_ptr<Boll>& boll);
 void PinInit();
 
 
-bool zff = false;
-Vector2 neuVec = { 0,0 };
-int neuCon = 0;
-float powP = 40;
+bool zff = false;			//球つきフラグ
+Vector2 neuVec = { 0,0 };	//フレーム毎の移動量
+int neuCon = 0;				//玉つき用のカウント
+float powP = 40;			//たまつきのパワー変数
 
 Vector2 RefLectVec(const Vector2& i, const Vector2& n)
 {
@@ -113,7 +113,11 @@ Vector2 RefLectVec(const Vector2& i, const Vector2& n)
 	return r;
 }
 
-void bam(void)
+/// <summary>
+/// 球をつくための関数
+/// </summary>
+/// <param name="pow">パワー値</param>
+void bam(int pow = powP)
 {
 	if (CheckHitKey(KEY_INPUT_UP))
 	{
@@ -141,10 +145,7 @@ void bam(void)
 		if (CheckHitKey(KEY_INPUT_Z) && !zff)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
-			//float momentX = (float)(Math.Sin(radian) * 0.1);
-			//float momentZ = (float)(Math.Cos(radian) * 0.1);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			//if (rand() % 2 == 0)
 			neuVec.x -= powP;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
@@ -156,10 +157,7 @@ void bam(void)
 		else if (CheckHitKey(KEY_INPUT_X) && !zff)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
-			//float momentX = (float)(Math.Sin(radian) * 0.1);
-			//float momentZ = (float)(Math.Cos(radian) * 0.1);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			//if (rand() % 2 == 0)
 			neuVec.x = -powP;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
@@ -167,6 +165,18 @@ void bam(void)
 			neuVec = rtvec / 10;
 			if (neuVec.x < 0)
 				neuVec.x *= -1;
+			neuVec.x *= 2;
+			neuCon++;
+		}
+		else if (CheckHitKey(KEY_INPUT_C) && !zff)
+		{
+			auto hillflt = GetRadian(HillPositions[0]);
+			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
+			neuVec.y -= pow;
+			tvec.Normalized();
+			auto rtvec = RefLectVec(neuVec, tvec);
+			zff = true;
+			neuVec = rtvec / 10;
 			neuVec.x *= 2;
 			neuCon++;
 		}
@@ -192,7 +202,6 @@ void bam(void)
 		}
 	}
 }
-
 
 void pinIshit(std::shared_ptr<Boll>& boll);
 
@@ -284,7 +293,6 @@ int main()
 			}
 		}
 	}
-
 }
 void hollIsHit(std::shared_ptr<Boll>& boll, bool& balF)
 {
@@ -309,7 +317,7 @@ void pinIshit(std::shared_ptr<Boll>& boll)
 			auto vec = boll->vec_;
 			boll->vec_.x += distance.x * -0.1;
 			boll->vec_.y = distance.y * -0.1;
-			
+
 
 			//auto pos = boll->pos_ + vec;
 			//if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {

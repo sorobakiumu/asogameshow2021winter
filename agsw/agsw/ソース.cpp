@@ -6,6 +6,7 @@
 #include "Geometry.h"
 #include <cmath>
 #include <random>
+#include "JankenPon.h"
 
 class Boll {
 public:
@@ -71,8 +72,7 @@ std::pair<Vector2, Vector2> HillPositions[] = {
 	{{xoffset + xgameScreen,130} ,{400,110}},
 	{{xoffset,220}, {400,200}},
 	{{xoffset + xgameScreen,330} ,{400,300}},
-	{{xoffset,420} ,{400,400}},
-	//{{xoffset,400},{400+ xgameScreen,500}}
+	{{xoffset,420} ,{400,400}}
 };
 
 const float pinsize = 2.5f;
@@ -84,6 +84,7 @@ void HillIsHit(std::shared_ptr<Boll>& boll);
 
 void PinInit();
 
+
 bool zff = false;			//球つきフラグ
 Vector2 neuVec = { 0,0 };	//フレーム毎の移動量
 int neuCon = 0;				//玉つき用のカウント
@@ -91,6 +92,12 @@ float powP = 40;			//たまつきのパワー変数
 
 Vector2 RefLectVec(const Vector2& i, const Vector2& n)
 {
+	//反射ベクトルの式
+	//R=I-2*（N・I）N
+	//をそのままプログラムにする
+	//ただし、オペレーターオーバーロード
+	//の関係で
+	//
 	Vector2 r = i - Vector2(n.x * (Dot(i, n) * 2), n.y * (Dot(i, n) * 2));
 	return r;
 }
@@ -104,10 +111,10 @@ void bam(int pow = powP)
 	if (CheckHitKey(KEY_INPUT_UP))
 	{
 		powP += 0.5;
-		//if (powP > 100)
-		//{
-		//	powP = 100;
-		//}
+		if (powP > 100)
+		{
+			powP = 100;
+		}
 		printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
 	}
 	if (CheckHitKey(KEY_INPUT_DOWN))
@@ -119,7 +126,7 @@ void bam(int pow = powP)
 		}
 		printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
 	}
-	
+
 	for (auto b : bolls)
 	{
 		auto* ve = &b->vec_;
@@ -128,8 +135,7 @@ void bam(int pow = powP)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-
-			neuVec.x -= pow;
+			neuVec.x -= powP;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
 			zff = true;
@@ -141,8 +147,7 @@ void bam(int pow = powP)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-
-			neuVec.x = -pow;
+			neuVec.x = -powP;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
 			zff = true;
@@ -156,7 +161,6 @@ void bam(int pow = powP)
 		{
 			auto hillflt = GetRadian(HillPositions[0]);
 			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-
 			neuVec.y -= pow;
 			tvec.Normalized();
 			auto rtvec = RefLectVec(neuVec, tvec);
@@ -167,14 +171,14 @@ void bam(int pow = powP)
 		}
 		else
 		{
-			if(neuCon == 0)
+			if (neuCon == 0)
 			{
 				neuVec = { 0,0 };
 				zff = false;
 			}
 			else
 			{
-				if (neuCon/2 < 5)
+				if (neuCon / 2 < 5)
 				{
 					*ve = neuVec;
 					neuCon++;
@@ -188,6 +192,7 @@ void bam(int pow = powP)
 	}
 }
 
+void pinIshit(std::shared_ptr<Boll>& boll);
 
 int main()
 {
@@ -202,91 +207,117 @@ int main()
 	PinInit();
 
 	bool balF = false;
-	while (true)
+	JankenPon janken;
+	bool jankF = false;
+	while (ProcessMessage()==0)
 	{
-		//移動入力情報
-		key = CheckHitKey(KEY_INPUT_SPACE);
-		if (!balF)
-			if ((key == true) && (oldkey == true)) {
-				bolls.emplace_back(new Boll({ downpt,1.0f }));
-				balF = true;
-			}
-		if (CheckHitKey(KEY_INPUT_RIGHT))
+		if (!jankF)
 		{
-			downpt += 3;
-		}
-		else if (CheckHitKey(KEY_INPUT_LEFT)) {
-			downpt -= 3;
-		}
-		oldkey = key;
-
-		//当たり判定
-		for (auto boll : bolls) {
-			boll->vec_.y += gravity;
-			//坂の当たり判定
-			HillIsHit(boll);
-			/*for (auto pin : pinPositions) {
-				if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
-					auto distance = pin - boll->pos_;
-					if (distance.x == 0) {
-						distance.x = (std::rand() % 2) * 2 - 1;
-					}
-					auto vec = boll->vec_;
-					vec.x += distance.x * -0.1;
-					vec.y = distance.y * -0.1;
-					auto pos = boll->pos_ + vec;
-					if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
-
-					}
-
-
+			if (CheckHitKey(KEY_INPUT_J))
+			{
+				jankF = true;
+			}
+			//移動入力情報
+			key = CheckHitKey(KEY_INPUT_SPACE);
+			if (!balF)
+				if ((key == true) && (oldkey == true)) {
+					bolls.emplace_back(new Boll({ downpt,1.0f }));
+					balF = true;
 				}
-			}*/
-		}
+			if (CheckHitKey(KEY_INPUT_RIGHT))
+			{
+				downpt += 3;
+			}
+			else if (CheckHitKey(KEY_INPUT_LEFT)) {
+				downpt -= 3;
+			}
+			oldkey = key;
 
+			//当たり判定
+			for (auto boll : bolls) {
+				boll->vec_.y += gravity;
+				//坂の当たり判定
+				//HillIsHit(boll);
+				pinIshit(boll);
+			}
+		}
+		else
+		{
+			janken.RunGame();
+		}
 		ClearDrawScreen();
-		//ゲームエリアの描画
-		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
+		if (!jankF)
+		{
+			//ゲームエリアの描画
+			DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 
-		//ボールの描画
-		for (auto b : bolls) {
-			auto color = 0xff0000;
-			DrawCircle(b->pos_.x, b->pos_.y, b->r, color, true, true);
-			DrawCircle(b->pos_.x, b->pos_.y, b->r, 0x000000, false, true);
+			//ボールの描画
+			for (auto b : bolls) {
+				auto color = 0xff0000;
+				DrawCircle(b->pos_.x, b->pos_.y, b->r, color, true, true);
+				DrawCircle(b->pos_.x, b->pos_.y, b->r, 0x000000, false, true);
+			}
+			//打ちだし場所の描画(デバッグ用)
+			DrawCircle(downpt, 20, 20, 0x000000, false, true);
+			//坂の描画
+			for (auto h : HillPositions) {
+				DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
+			}
+			//ピンの描画
+			for (auto p : pinPositions) {
+				DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
+			}
+			DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
+			//ボールの更新
+			bam();
+
+
+			for (auto b : bolls) {
+				b->updata();
+				if (b->pos_.x - b->r < xoffset) {
+					b->pos_.x = xoffset + b->r;
+				}
+				else if (b->pos_.x + b->r > xoffset + 400) {
+					b->pos_.x = xoffset + 400 - b->r;
+				}
+			}
+			for (auto b : bolls) {
+				if (b->pos_.y > 600) {
+					bolls.clear();
+					balF = false;
+				}
+			}
 		}
-		//打ちだし場所の描画(デバッグ用)
-		DrawCircle(downpt, 20, 20, 0x000000, false, true);
-		//坂の描画
-		for (auto h : HillPositions) {
-			DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
+		else
+		{
+
+			janken.DrawGame();
 		}
-		//ピンの描画
-		//for (auto p : pinPositions) {
-		//	DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
-		//}
-		DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 		ScreenFlip();
-		//ボールの更新
-		bam();
+	}
+	delete &janken;
+}
+void pinIshit(std::shared_ptr<Boll>& boll)
+{
+	for (auto pin : pinPositions) {
+		if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
+			auto distance = pin - boll->pos_;
+			if (distance.x == 0) {
+				distance.x = (std::rand() % 2) * 2 - 1;
+			}
+			auto vec = boll->vec_;
+			boll->vec_.x += distance.x * -0.1;
+			boll->vec_.y = distance.y * -0.1;
 
 
-		for (auto b : bolls) {
-			b->updata();
-			if (b->pos_.x - b->r < xoffset) {
-				b->pos_.x = xoffset + b->r;
-			}
-			else if (b->pos_.x + b->r > xoffset + 400) {
-				b->pos_.x = xoffset + 400 - b->r;
-			}
-		}
-		for (auto b : bolls) {
-			if (b->pos_.y > 600) {
-				bolls.clear();
-				balF = false;
-			}
+			//auto pos = boll->pos_ + vec;
+			//if ((boll->pos_ - pin).Magnitude() <= (boll->r + pinsize)) {
+
+			//}
+
+
 		}
 	}
-
 }
 //ピンの初期化
 void PinInit()
