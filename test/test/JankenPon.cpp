@@ -59,15 +59,15 @@ void JankenPon::RunGame(void)
 
 void JankenPon::DrawGame(void)
 {
-	int x=50, y=50;
+	int x = 50, y = 50;
 	switch (nowmode_)
 	{
 	case STAY:
 		if (jcon_ < 3)
 		{
 			DrawFormatString(x, y, 0xFFFFFF, L"さんかい練習するよ　Zぐー　Xちょき　Cぱー");
-			DrawFormatString(x, y+20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
-			DrawFormatString(x, y+40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
+			DrawFormatString(x, y + 20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
+			DrawFormatString(x, y + 40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
 		}
 		else
 		{
@@ -112,28 +112,28 @@ void JankenPon::DrawGame(void)
 
 	y += 40;
 	x += 200;
-	if (myflg_ == JANKENACTION::GU) 
+	if (myflg_ == JANKENACTION::GU)
 	{
 		DrawFormatString(x, y, 0xFF0000, L"ボクは　グー");
 	}
-	else if (myflg_ == JANKENACTION::TYOKI) 
+	else if (myflg_ == JANKENACTION::TYOKI)
 	{
 		DrawFormatString(x, y, 0xFF0000, L"ボクは　チョキ");
 	}
-	else if(myflg_ == JANKENACTION::PA)
+	else if (myflg_ == JANKENACTION::PA)
 	{
 		DrawFormatString(x, y, 0xFF0000, L"ボクは　パー");
 	}
 
-	if (youact_ == JANKENACTION::GU) 
+	if (youact_ == JANKENACTION::GU)
 	{
 		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
 	}
-	else if (youact_ == JANKENACTION::TYOKI) 
+	else if (youact_ == JANKENACTION::TYOKI)
 	{
 		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
 	}
-	else if (youact_ == JANKENACTION::PA) 
+	else if (youact_ == JANKENACTION::PA)
 	{
 		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
 	}
@@ -149,7 +149,7 @@ void JankenPon::init(void)
 	nowmode_ = NOWMODE::STAY;
 	youact_ = JANKENACTION::NO;
 	myflg_ = JANKENACTION::NO;
-	resconNum_ = 0;	
+	resconNum_ = 0;
 	resconF_ = false;
 	jcon_ = 0;
 	res_ = 0;
@@ -195,7 +195,7 @@ void JankenPon::init(void)
 		} while (!tfile.eof());
 		tfile.close();
 	}
-	
+
 }
 
 void JankenPon::SetAct(void)
@@ -210,10 +210,10 @@ void JankenPon::SetAct(void)
 		//もし、前回が　まるまる　のとき、ちょきを出すのが多いならちょきと推察する
 		//もし、前回が　まるまる　のとき、ぱー　をだすのがおおいならぱーと推察する
 		//もし、すべて否であれば、						そのままぐーとすいさつする
-		if (jankenData_[otout_-1][nextfindMove_] < jankenData_[otout_-1][1]) nextfindMove_ = 1;
-		if (jankenData_[otout_-1][nextfindMove_] < jankenData_[otout_-1][2]) nextfindMove_ = 2;
+		if (jankenData_[otout_ - 1][nextfindMove_] < jankenData_[otout_ - 1][1]) nextfindMove_ = 1;
+		if (jankenData_[otout_ - 1][nextfindMove_] < jankenData_[otout_ - 1][2]) nextfindMove_ = 2;
 		//ぐー　ちょき　ぱー　えらんだものの2つさきが、勝てる手だから、たす2をする
-		myflg_ = JANKENACTION(((nextfindMove_+2 ) % 3)+1);
+		myflg_ = JANKENACTION(((nextfindMove_ + 2) % 3) + 1);
 
 		if (rand() % 10 == 0)
 		{
@@ -279,7 +279,7 @@ void JankenPon::GameMove(void)
 	}
 	else
 	{
-		//if (gcon_ / 60 > 2)
+		if (gcon_ / 60 > 2)
 		{
 			nowmode_ = NOWMODE::RESER;
 			resconNum_ = rand() % 3;
@@ -288,7 +288,7 @@ void JankenPon::GameMove(void)
 			return;
 		}
 		//else
-			gcon_++;
+		gcon_++;
 	}
 }
 
@@ -298,22 +298,22 @@ void JankenPon::ResultMove(void)
 	{
 		resconF_ = true;
 	}
-	//if (!resconF_)
-	//{
-	//	res_++;
-	//	if (res_ > 10)
-	//		res_ = 1;
+	if (!resconF_)
+	{
+		res_++;
+		if (res_ > 10)
+			res_ = 1;
 
-	//	if (gcon_ > 60 * 3 + resconNum_)
-	//	{
-	//		if (rand() % 5 == 0)
-	//		{
-	//			gcon_ = 0;
-	//			resconF_ = true;
-	//		}
-	//	}
-	//}
-	//else
+		if (gcon_ > 60 * 3 + resconNum_)
+		{
+			if (rand() % 5 == 0)
+			{
+				gcon_ = 0;
+				resconF_ = true;
+			}
+		}
+	}
+	else
 	{
 		if (CheckHitKey(KEY_INPUT_SPACE))
 		{
