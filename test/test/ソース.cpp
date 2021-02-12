@@ -1,8 +1,5 @@
-#include <Windows.h>
 #include <DxLib.h>
-#include <vector>
 #include <memory>
-#include <tuple>
 #include "Geometry.h"
 #include <cmath>
 #include <random>
@@ -72,17 +69,21 @@ std::pair<Vector2, Vector2> HillPositions[] = {
 	{{xoffset + xgameScreen,90} ,{400,70}},
 	{{xoffset+ hollR *2,90} ,{320,70}},
 	{{xoffset,220}, {400,200}},
-	{{400+hollR*2,200}, {xoffset + xgameScreen-hollR*2,180}},
+	{{400+hollR*2,200}, {xoffset + xgameScreen-hollR*2+10,180}},
 	{{xoffset + xgameScreen,330} ,{xoffset+hollR*5,300}},
-	{{xoffset,420} ,{400,400}}
+	{{xoffset,420} ,{400,400}},
+	{{xoffset + xgameScreen,500} ,{400,480}},
+
 };
 Vector2 hollPosition[] = {
 	{xoffset + hollR, 90},
 	{xoffset + xgameScreen - hollR,180 } ,
 	{xoffset + hollR,300 } };
 
-std::pair<Vector2, Vector2> wallPositions[] = {
-	{{xoffset + xgameScreen,90} ,{400,70}},
+//firstÇ™è„ë§
+std::pair<Vector2, Vector2> wallPositions[] = { 
+	{{xoffset + 50,550} ,{xoffset + 50,600}},
+	{{xoffset + 50 + hollR * 2,550} ,{xoffset + 50 + hollR * 2,600}}
 };
 
 
@@ -220,7 +221,7 @@ int main()
 	//PinInit();
 
 	bool balF = false;
-	while (true)
+	while (ProcessMessage() != -1)
 	{
 		//à⁄ìÆì¸óÕèÓïÒ
 		key = CheckHitKey(KEY_INPUT_SPACE);
@@ -245,6 +246,36 @@ int main()
 			HillIsHit(boll);
 			pinIshit(boll);
 			hollIsHit(boll, balF);
+			for (auto wall : wallPositions) {
+				auto wallnorm = (wall.second - wall.first).Normalized();
+				auto b = boll->pos_ - wall.first;
+				auto P = wall.first + wallnorm * (wallnorm * b);
+				auto bottom = max(wall.first.y, wall.second.y);
+				auto top = min(wall.first.y, wall.second.y);
+				if (top < boll->pos_.y) {
+					if ((boll->pos_ - P).Magnitude() < bollR) {
+						auto A = boll->pos_ - wall.second;
+						auto B = wall.first - wall.second;
+						auto S = boll->pos_ - wall.first;
+						if ((A * S) * (B * S) >= 0) {
+							if (boll->pos_.x < wall.first.x)
+							{
+								boll->pos_.x = wall.first.x - bollR;
+							}
+							else {
+								boll->pos_.x = wall.first.x + bollR;
+							}
+							auto wallflt = GetRadian(wall);
+							Vector2 tvec = { (static_cast<float>(sin(wallflt) * 0.1f)),(static_cast<float>(cos(wallflt) * 0.1f)) };
+							tvec.Normalized();
+							boll->vec_.y += gravity;
+							auto rtvec = RefLectVec(boll->vec_.Normalized(), tvec);
+							boll->vec_.x = boll->vec_.x * rtvec.x;
+							boll->vec_.y = boll->vec_.y * rtvec.y;
+						}
+					}
+				}
+			}
 		}
 
 		ClearDrawScreen();
@@ -270,6 +301,9 @@ int main()
 		//åäÇÃï`âÊ
 		for (auto p : hollPosition) {
 			DrawCircle(p.x, p.y, hollR, 0x000000, true, true);
+		}
+		for (auto p:wallPositions) {
+			DrawLine(p.first.x, p.first.y, p.second.x, p.second.y, 0x000000);
 		}
 		DrawFormatString(0, 0, 0xFFFFFF, L"ÇœÇÌÅ[ %3.3f ál ", powP);
 		ScreenFlip();
