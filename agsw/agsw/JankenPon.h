@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "BaseGame.h"
 
 #define JankenMAX 3
 #define JankenMove 3
@@ -29,7 +30,7 @@ enum JANKENACTION
 /// リザルト中
 /// しゅーりょー
 /// </summary>
-enum JNOWMODE
+enum NOWMODE
 {
 	STAY,
 	JANK,
@@ -37,7 +38,7 @@ enum JNOWMODE
 	FIN
 };
 
-enum JGameFlag
+enum GameFlag
 {
 	no_Gf,
 	DRAW_GF,
@@ -45,7 +46,8 @@ enum JGameFlag
 	WINCPU_GF
 };
 
-class JankenPon
+class JankenPon :
+	public BaseGame
 {
 public:
 	JankenPon();
@@ -55,19 +57,20 @@ public:
 	/// げーむるーぷ
 	/// </summary>
 	/// <param name=""></param>
-	void RunGame(void);
+	void Run(void) override;
 
 	/// <summary>
 	/// びょうが
 	/// </summary>
 	/// <param name=""></param>
-	void DrawGame(void);
-private:
+	void Draw(void) override;
 	/// <summary>
 	/// 最初だけの初期化
 	/// </summary>
 	/// <param name=""></param>
-	void init(void);
+	void Init(void) override;
+private:
+
 
 	/// <summary>
 	/// どの手を出すか考え（数が多いのを探す）て選ぶ　10かいにいっかいランダム！運あり！
@@ -105,7 +108,7 @@ private:
 	/// <param name=""></param>
 	void WinCheck(void);
 
-	JNOWMODE nowmode_;		//いまのこのミニゲームでの状態
+	NOWMODE nowmode_;		//いまのこのミニゲームでの状態
 	JANKENACTION youact_;	//プレイヤーが選んだ手
 	JANKENACTION myflg_;	//CPUくんが選んだ手
 	int nextfindMove_;		//CPU君が予想()したプレイヤーの次の手
@@ -114,7 +117,7 @@ private:
 	int jcon_;				//じゃんけんかうんたー
 	bool gconf_;			//げーむカウント用のフラグ
 	int gcon_;				//げーむカウント
-	JGameFlag gameflag_;		//勝者判定結果の変数
+	GameFlag gameflag_;		//勝者判定結果の変数
 
 	int resconNum_;			//リザルトの秒数決定後の秒数格納変数
 	bool resconF_;			//リザルトで、ルーレット終わったか（しないかどうか）

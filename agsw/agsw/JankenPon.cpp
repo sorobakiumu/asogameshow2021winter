@@ -1,12 +1,16 @@
+#include <Windows.h>
 #include <DxLib.h>
+#include <vector>
+#include <memory>
+#include <tuple>
+#include "Geometry.h"
 #include <cmath>
 #include <random>
-#include "Geometry.h"
+#include <time.h>
 #include "JankenPon.h"
 
 JankenPon::JankenPon()
 {
-	init();	//初期化！
 }
 
 JankenPon::~JankenPon()
@@ -31,7 +35,7 @@ JankenPon::~JankenPon()
 	}
 }
 
-void JankenPon::RunGame(void)
+void JankenPon::Run(void)
 {
 	switch (nowmode_)
 	{
@@ -52,17 +56,17 @@ void JankenPon::RunGame(void)
 	}
 }
 
-void JankenPon::DrawGame(void)
+void JankenPon::Draw(void)
 {
-	int x=50, y=50;
+	int x = 50, y = 50;
 	switch (nowmode_)
 	{
 	case STAY:
 		if (jcon_ < 3)
 		{
 			DrawFormatString(x, y, 0xFFFFFF, L"さんかい練習するよ　Zぐー　Xちょき　Cぱー");
-			DrawFormatString(x, y+20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
-			DrawFormatString(x, y+40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
+			DrawFormatString(x, y + 20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
+			DrawFormatString(x, y + 40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
 		}
 		else
 		{
@@ -73,17 +77,17 @@ void JankenPon::DrawGame(void)
 		break;
 	case JANK:
 		DrawFormatString(x, y, 0xFFFFFF, L"ぽん！");
-		if (gameflag_ == JGameFlag::DRAW_GF)
+		if (gameflag_ == GameFlag::DRAW_GF)
 			DrawFormatString(x, y + 20, 0xFFFFFF, L"ひきわけだね！");
-		if (gameflag_ == JGameFlag::WINCPU_GF)
+		if (gameflag_ == GameFlag::WINCPU_GF)
 			DrawFormatString(x, y + 20, 0xFF0000, L"ボクのかちだね！");
-		if (gameflag_ == JGameFlag::WINYOU_GF)
+		if (gameflag_ == GameFlag::WINYOU_GF)
 			DrawFormatString(x, y + 20, 0x0000FF, L"キミのかちだね！");
 		break;
 	case RESER:
 		if (!resconF_)
 		{
-			if (gameflag_ == JGameFlag::WINYOU_GF)
+			if (gameflag_ == GameFlag::WINYOU_GF)
 			{
 				DrawFormatString(x, y, 0xFFFFFF, L"ルーレット！");
 				DrawFormatString(x + 20, y + 20, 0xFFFFFF, L"%d　ポイント", res_);
@@ -91,7 +95,7 @@ void JankenPon::DrawGame(void)
 		}
 		else
 		{
-			if (gameflag_ == JGameFlag::WINYOU_GF)
+			if (gameflag_ == GameFlag::WINYOU_GF)
 			{
 				DrawFormatString(x, y, 0xFFFFFF, L"やったね！");
 				DrawFormatString(x + 20, y + 20, 0xFFFFFF, L"%d　ポイント", res_);
@@ -107,28 +111,28 @@ void JankenPon::DrawGame(void)
 
 	y += 40;
 	x += 200;
-	if (myflg_ == JANKENACTION::GU) 
+	if (myflg_ == JANKENACTION::GU)
 	{
 		DrawFormatString(x, y, 0xFF0000, L"ボクは　グー");
 	}
-	else if (myflg_ == JANKENACTION::TYOKI) 
+	else if (myflg_ == JANKENACTION::TYOKI)
 	{
 		DrawFormatString(x, y, 0xFF0000, L"ボクは　チョキ");
 	}
-	else if(myflg_ == JANKENACTION::PA)
+	else if (myflg_ == JANKENACTION::PA)
 	{
 		DrawFormatString(x, y, 0xFF0000, L"ボクは　パー");
 	}
 
-	if (youact_ == JANKENACTION::GU) 
+	if (youact_ == JANKENACTION::GU)
 	{
 		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
 	}
-	else if (youact_ == JANKENACTION::TYOKI) 
+	else if (youact_ == JANKENACTION::TYOKI)
 	{
 		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
 	}
-	else if (youact_ == JANKENACTION::PA) 
+	else if (youact_ == JANKENACTION::PA)
 	{
 		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
 	}
@@ -136,15 +140,15 @@ void JankenPon::DrawGame(void)
 
 }
 
-void JankenPon::init(void)
+void JankenPon::Init(void)
 {
 	std::ifstream tfile("data/jank.gdf");
 
-	gameflag_ = JGameFlag::no_Gf;
-	nowmode_ = JNOWMODE::STAY;
+	gameflag_ = GameFlag::no_Gf;
+	nowmode_ = NOWMODE::STAY;
 	youact_ = JANKENACTION::NO;
 	myflg_ = JANKENACTION::NO;
-	resconNum_ = 0;	
+	resconNum_ = 0;
 	resconF_ = false;
 	jcon_ = 0;
 	res_ = 0;
@@ -190,7 +194,7 @@ void JankenPon::init(void)
 		} while (!tfile.eof());
 		tfile.close();
 	}
-	
+
 }
 
 void JankenPon::SetAct(void)
@@ -205,10 +209,10 @@ void JankenPon::SetAct(void)
 		//もし、前回が　まるまる　のとき、ちょきを出すのが多いならちょきと推察する
 		//もし、前回が　まるまる　のとき、ぱー　をだすのがおおいならぱーと推察する
 		//もし、すべて否であれば、						そのままぐーとすいさつする
-		if (jankenData_[otout_-1][nextfindMove_] < jankenData_[otout_-1][1]) nextfindMove_ = 1;
-		if (jankenData_[otout_-1][nextfindMove_] < jankenData_[otout_-1][2]) nextfindMove_ = 2;
+		if (jankenData_[otout_ - 1][nextfindMove_] < jankenData_[otout_ - 1][1]) nextfindMove_ = 1;
+		if (jankenData_[otout_ - 1][nextfindMove_] < jankenData_[otout_ - 1][2]) nextfindMove_ = 2;
 		//ぐー　ちょき　ぱー　えらんだものの2つさきが、勝てる手だから、たす2をする
-		myflg_ = JANKENACTION(((nextfindMove_+2 ) % 3)+1);
+		myflg_ = JANKENACTION(((nextfindMove_ + 2) % 3) + 1);
 
 		if (rand() % 10 == 0)
 		{
@@ -234,7 +238,7 @@ void JankenPon::StayMove(void)
 	if (youact_ != JANKENACTION::NO)
 	{
 		gconf_ = true;
-		nowmode_ = JNOWMODE::JANK;
+		nowmode_ = NOWMODE::JANK;
 	}
 }
 
@@ -251,8 +255,8 @@ void JankenPon::Finmove(void)
 		nextfindMove_ = 0;
 		gconf_ = false;
 		gcon_ = 0;
-		gameflag_ = JGameFlag::no_Gf;
-		nowmode_ = JNOWMODE::STAY;
+		gameflag_ = GameFlag::no_Gf;
+		nowmode_ = NOWMODE::STAY;
 	}
 }
 
@@ -276,20 +280,20 @@ void JankenPon::GameMove(void)
 	{
 		if (gcon_ / 60 > 2)
 		{
-			nowmode_ = JNOWMODE::RESER;
+			nowmode_ = NOWMODE::RESER;
 			resconNum_ = rand() % 3;
 			gcon_ = 0;
 			res_ = rand() % 11;
 			return;
 		}
 		//else
-			gcon_++;
+		gcon_++;
 	}
 }
 
 void JankenPon::ResultMove(void)
 {
-	if (gameflag_ != JGameFlag::WINYOU_GF)
+	if (gameflag_ != GameFlag::WINYOU_GF)
 	{
 		resconF_ = true;
 	}
@@ -312,7 +316,7 @@ void JankenPon::ResultMove(void)
 	{
 		if (CheckHitKey(KEY_INPUT_SPACE))
 		{
-			nowmode_ = JNOWMODE::FIN;
+			nowmode_ = NOWMODE::FIN;
 			gcon_ = 0;
 			return;
 		}
@@ -326,45 +330,45 @@ void JankenPon::WinCheck(void)
 	{
 		if (myflg_ == JANKENACTION::GU)
 		{
-			gameflag_ = JGameFlag::DRAW_GF;
+			gameflag_ = GameFlag::DRAW_GF;
 		}
 		if (myflg_ == JANKENACTION::TYOKI)
 		{
-			gameflag_ = JGameFlag::WINYOU_GF;
+			gameflag_ = GameFlag::WINYOU_GF;
 		}
 		if (myflg_ == JANKENACTION::PA)
 		{
-			gameflag_ = JGameFlag::WINCPU_GF;
+			gameflag_ = GameFlag::WINCPU_GF;
 		}
 	}
 	if (youact_ == JANKENACTION::TYOKI)
 	{
 		if (myflg_ == JANKENACTION::GU)
 		{
-			gameflag_ = JGameFlag::WINCPU_GF;
+			gameflag_ = GameFlag::WINCPU_GF;
 		}
 		if (myflg_ == JANKENACTION::TYOKI)
 		{
-			gameflag_ = JGameFlag::DRAW_GF;
+			gameflag_ = GameFlag::DRAW_GF;
 		}
 		if (myflg_ == JANKENACTION::PA)
 		{
-			gameflag_ = JGameFlag::WINYOU_GF;
+			gameflag_ = GameFlag::WINYOU_GF;
 		}
 	}
 	if (youact_ == JANKENACTION::PA)
 	{
 		if (myflg_ == JANKENACTION::GU)
 		{
-			gameflag_ = JGameFlag::WINYOU_GF;
+			gameflag_ = GameFlag::WINYOU_GF;
 		}
 		if (myflg_ == JANKENACTION::TYOKI)
 		{
-			gameflag_ = JGameFlag::WINCPU_GF;
+			gameflag_ = GameFlag::WINCPU_GF;
 		}
 		if (myflg_ == JANKENACTION::PA)
 		{
-			gameflag_ = JGameFlag::DRAW_GF;
+			gameflag_ = GameFlag::DRAW_GF;
 		}
 	}
 }
