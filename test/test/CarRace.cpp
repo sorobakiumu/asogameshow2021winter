@@ -35,9 +35,6 @@ void CarRace::Ran()
 		IsHit(boll, balF);
 		//â‚Ì“–‚½‚è”»’è
 	}
-
-	ClearDrawScreen();
-	
 }
 
 void CarRace::Draw()

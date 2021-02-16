@@ -5,9 +5,12 @@
 #include <random>
 #include <vector>
 #include "CarRace.h"
+#include "JankenPon.h"
+#include "WorldSoccer.h"
 
 namespace {
 	std::shared_ptr<CarRace> carRace_;
+	std::shared_ptr<WorldSoccer> worldSoccer_;
 }
 
 
@@ -22,13 +25,15 @@ int main()
 
 	carRace_ = std::make_shared<CarRace>();
 	carRace_->Init();
-	//ƒsƒ“‚Ì‰Šú‰»
+
+	worldSoccer_ = std::make_shared<WorldSoccer>();
+	worldSoccer_->Init();
 
 	while (ProcessMessage() != -1)
 	{
-		carRace_->Ran();
+		worldSoccer_->Ran();
 		ClsDrawScreen();
-		carRace_->Draw();
+		worldSoccer_->Draw();
 		ScreenFlip();
 	}
 
