@@ -80,3 +80,26 @@ Vector2::operator-=(const Vector2& v) {
 	x -= v.x;
 	y -= v.y;
 }
+
+float GetRadian(std::pair<Vector2, Vector2> hillPos)
+{
+	auto up = hillPos.first;
+	auto down = hillPos.second;
+
+	if (hillPos.second.y < hillPos.first.y) {
+		up = hillPos.second;
+		down = hillPos.first;
+	}
+	return atan2(up.y - down.y, up.x - down.x);
+}
+Vector2 RefLectVec(const Vector2& i, const Vector2& n)
+{
+	//反射ベクトルの式
+	//R=I-2*（N・I）N
+	//をそのままプログラムにする
+	//ただし、オペレーターオーバーロード
+	//の関係で
+	//
+	Vector2 r = i - Vector2(n.x * (Dot(i, n) * 2), n.y * (Dot(i, n) * 2));
+	return r;
+}
