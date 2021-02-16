@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 //2D座標・ベクトルを表す構造体
 struct Vector2 {
@@ -38,6 +39,24 @@ float operator*(const Vector2& va, const Vector2& vb);
 
 ///外積演算子
 float operator%(const Vector2& va, const Vector2& vb);
+//
+//Vector2 RefLectVec(const Vector2& i, const Vector2& n)
+//{
+//	Vector2 r = i - Vector2(n.x * (Dot(i, n) * 2), n.y * (Dot(i, n) * 2));
+//	return r;
+//}
+//
+//float GetRadian(std::pair<Vector2, Vector2> hillPos)
+//{
+//	auto up = hillPos.first;
+//	auto down = hillPos.second;
+//
+//	if (hillPos.second.y < hillPos.first.y) {
+//		up = hillPos.second;
+//		down = hillPos.first;
+//	}
+//	return atan2(up.y - down.y, up.x - down.x);
+//}
 
 struct Vector3 {
 	Vector3() :x(0), y(0), z(0) {}

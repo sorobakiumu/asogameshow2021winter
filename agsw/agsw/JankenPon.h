@@ -29,7 +29,7 @@ enum JANKENACTION
 /// リザルト中
 /// しゅーりょー
 /// </summary>
-enum NOWMODE
+enum JNOWMODE
 {
 	STAY,
 	JANK,
@@ -37,7 +37,7 @@ enum NOWMODE
 	FIN
 };
 
-enum GameFlag
+enum JGameFlag
 {
 	no_Gf,
 	DRAW_GF,
@@ -105,7 +105,7 @@ private:
 	/// <param name=""></param>
 	void WinCheck(void);
 
-	NOWMODE nowmode_;		//いまのこのミニゲームでの状態
+	JNOWMODE nowmode_;		//いまのこのミニゲームでの状態
 	JANKENACTION youact_;	//プレイヤーが選んだ手
 	JANKENACTION myflg_;	//CPUくんが選んだ手
 	int nextfindMove_;		//CPU君が予想()したプレイヤーの次の手
@@ -114,7 +114,7 @@ private:
 	int jcon_;				//じゃんけんかうんたー
 	bool gconf_;			//げーむカウント用のフラグ
 	int gcon_;				//げーむカウント
-	GameFlag gameflag_;		//勝者判定結果の変数
+	JGameFlag gameflag_;		//勝者判定結果の変数
 
 	int resconNum_;			//リザルトの秒数決定後の秒数格納変数
 	bool resconF_;			//リザルトで、ルーレット終わったか（しないかどうか）
