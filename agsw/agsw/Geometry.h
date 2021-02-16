@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 //2D座標・ベクトルを表す構造体
 struct Vector2 {
@@ -39,33 +40,20 @@ float operator*(const Vector2& va, const Vector2& vb);
 ///外積演算子
 float operator%(const Vector2& va, const Vector2& vb);
 
-struct Vector3 {
-	Vector3() :x(0), y(0), z(0) {}
-	Vector3(float ix, float iy,float iz) :x(ix), y(iy), z(iz){}
-	float x, y, z;
-	///ベクトルの大きさを返します
-	float Magnitude()const;
+float GetRadian(std::pair<Vector2, Vector2> hillPos);
 
-	///正規化(大きさを１に)します
-	void Normalize();
+Vector2 RefLectVec(const Vector2& i, const Vector2& n);
 
-	///正規化ベクトルを返します
-	Vector3 Normalized();
+class Boll {
+public:
+	Vector2 pos_;
+	Vector2 vec_;
 
-	void operator+=(const Vector3& v);
-	void operator-=(const Vector3& v);
-	void operator*=(float scale);
-	Vector3 operator*(float scale);
-	Vector3 operator-() {
-		return Vector3(-x, -y, -z);
+	Boll(Vector2 pos) {
+		pos_ = pos;
+		vec_ = {};
 	}
+	void updata();
+	bool alive = true;
+private:
 };
-
-Vector3 operator+(const Vector3& va, const Vector3 vb);
-Vector3 operator-(const Vector3& va, const Vector3 vb);
-
-///内積を返す
-float Dot(const Vector3& va, const Vector3& vb);
-///内積演算子
-float operator*(const Vector3& va, const Vector3& vb);
-

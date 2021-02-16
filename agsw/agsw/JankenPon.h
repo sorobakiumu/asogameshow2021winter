@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "BaseGame.h"
 
 #define JankenMAX 3
 #define JankenMove 3
@@ -45,7 +46,8 @@ enum GameFlag
 	WINCPU_GF
 };
 
-class JankenPon
+class JankenPon :
+	public BaseGame
 {
 public:
 	JankenPon();
@@ -55,19 +57,20 @@ public:
 	/// げーむるーぷ
 	/// </summary>
 	/// <param name=""></param>
-	void RunGame(void);
+	void Run(void) override;
 
 	/// <summary>
 	/// びょうが
 	/// </summary>
 	/// <param name=""></param>
-	void DrawGame(void);
-private:
+	void Draw(void) override;
 	/// <summary>
 	/// 最初だけの初期化
 	/// </summary>
 	/// <param name=""></param>
-	void init(void);
+	void Init(void) override;
+private:
+
 
 	/// <summary>
 	/// どの手を出すか考え（数が多いのを探す）て選ぶ　10かいにいっかいランダム！運あり！
