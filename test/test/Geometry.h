@@ -43,3 +43,17 @@ float operator%(const Vector2& va, const Vector2& vb);
 float GetRadian(std::pair<Vector2, Vector2> hillPos);
 
 Vector2 RefLectVec(const Vector2& i, const Vector2& n);
+
+class Boll {
+public:
+	Vector2 pos_;
+	Vector2 vec_;
+
+	Boll(Vector2 pos) {
+		pos_ = pos;
+		vec_ = {};
+	}
+	void updata();
+	bool alive = true;
+private:
+};
