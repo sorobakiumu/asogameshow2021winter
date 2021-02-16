@@ -9,11 +9,17 @@
 #include "WorldSoccer.h"
 
 namespace {
-	std::shared_ptr<CarRace> carRace_;
+	std::shared_ptr<BaseGame> game_;
 	std::shared_ptr<WorldSoccer> worldSoccer_;
+	std::shared_ptr<JankenPon> jankenpon_;
 }
 
-
+enum class GameMode
+{
+	CarRace,
+	WorldSoccer,
+	JankenPon
+};
 int main()
 {
 	DxLib::ChangeWindowMode(true);
@@ -23,17 +29,14 @@ int main()
 	}
 	ClsDrawScreen();
 
-	carRace_ = std::make_shared<CarRace>();
-	carRace_->Init();
-
-	worldSoccer_ = std::make_shared<WorldSoccer>();
-	worldSoccer_->Init();
+	game_ = std::make_shared<JankenPon>();
+	game_->Init();
 
 	while (ProcessMessage() != -1)
 	{
-		worldSoccer_->Ran();
+		game_->Run();
 		ClsDrawScreen();
-		worldSoccer_->Draw();
+		game_->Draw();
 		ScreenFlip();
 	}
 

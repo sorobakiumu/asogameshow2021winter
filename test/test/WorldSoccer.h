@@ -1,13 +1,15 @@
 #pragma once
 #include <vector>
 #include "Geometry.h"
+#include "BaseGame.h"
 
-class WorldSoccer
+class WorldSoccer :
+	public BaseGame
 {
 public:
-	void Ran();
-	void Draw();
-	void Init();
+	void Run() override;
+	void Draw() override;
+	void Init() override;
 private:
 	void PinInit();
 	void IsHit(std::shared_ptr<Boll>& boll);

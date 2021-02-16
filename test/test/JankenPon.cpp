@@ -11,7 +11,6 @@
 
 JankenPon::JankenPon()
 {
-	init();	//èâä˙âªÅI
 }
 
 JankenPon::~JankenPon()
@@ -36,7 +35,7 @@ JankenPon::~JankenPon()
 	}
 }
 
-void JankenPon::RunGame(void)
+void JankenPon::Run(void)
 {
 	switch (nowmode_)
 	{
@@ -57,7 +56,7 @@ void JankenPon::RunGame(void)
 	}
 }
 
-void JankenPon::DrawGame(void)
+void JankenPon::Draw(void)
 {
 	int x = 50, y = 50;
 	switch (nowmode_)
@@ -141,7 +140,7 @@ void JankenPon::DrawGame(void)
 
 }
 
-void JankenPon::init(void)
+void JankenPon::Init(void)
 {
 	std::ifstream tfile("data/jank.gdf");
 

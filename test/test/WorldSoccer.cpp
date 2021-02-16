@@ -2,7 +2,7 @@
 #include <DxLib.h>
 #include<random>
 
-void WorldSoccer::Ran()
+void WorldSoccer::Run()
 {
 	downpt = std::rand() % 350+225;
 	if (flame % 60 == 0) {

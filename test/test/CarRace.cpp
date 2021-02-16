@@ -9,7 +9,7 @@ CarRace::~CarRace()
 {
 }
 
-void CarRace::Ran()
+void CarRace::Run()
 {
 	//ˆÚ“®“ü—Íî•ñ
 	key = CheckHitKey(KEY_INPUT_SPACE);

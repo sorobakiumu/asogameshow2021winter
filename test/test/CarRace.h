@@ -2,15 +2,17 @@
 #include <memory>
 #include "Geometry.h"
 #include <vector>
+#include "BaseGame.h"
 
-class CarRace
+class CarRace :
+	public BaseGame
 {
 public:
 	CarRace();
 	~CarRace();
-	void Ran();
-	void Draw();
-	void Init();
+	void Run() override;
+	void Draw() override;
+	void Init() override;
 private:
 	void IsHit(std::shared_ptr<Boll>& boll, bool& balF);
 	void HillIsHit(std::shared_ptr<Boll>& boll);
