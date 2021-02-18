@@ -1,5 +1,5 @@
 #include<DxLib.h>
-#include "Scene/sceneMng.h"
+#include "masterMnj.h"
 #include "objmnj.h"
 
 Objmnj* Objmnj::sInstance = nullptr;

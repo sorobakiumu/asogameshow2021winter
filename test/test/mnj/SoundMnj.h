@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <DxLib.h>
-#include "common/Geometry.h"
+#include "../Geometry.h"
 #include <string>
 #include <map>
 
@@ -36,18 +36,18 @@ public:
 
 	void ResetD(void);
 
-	void AddBGM(std::string que);
+	void AddBGM(std::wstring que);
 
-	void AddSE(std::string que, VECTOR pos, float Dis);
+	void AddSE(std::wstring que, VECTOR pos, float Dis);
 	
 	void Run(void);
 
-	bool CheckSEList(std::string que);//指定したSEをすでに読み込んであるか調べる
+	bool CheckSEList(std::wstring que);//指定したSEをすでに読み込んであるか調べる
 private:
 	static SoundMnj* sInstance;
 
-	std::vector <std::pair<std::string,std::pair<VECTOR,float>>> seList_;					//SEを溜めておくキュー
-	std::map<std::string, int> seHMap_;
+	std::vector <std::pair<std::wstring,std::pair<VECTOR,float>>> seList_;					//SEを溜めておくキュー
+	std::map<std::wstring, int> seHMap_;
 
 	int bgmH_;
 

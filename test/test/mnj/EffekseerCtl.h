@@ -2,7 +2,10 @@
 #include <tuple>
 #include <vector>
 #include <DxLib.h>
-#include "Vector2.h"
+#include<map>
+#include<string>
+#include "../Geometry.h"
+#include<EffekseerForDXLib.h>
 
 using effmap = std::map<std::string,int>;
 class EffekseerCtl

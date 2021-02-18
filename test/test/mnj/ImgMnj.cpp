@@ -7,7 +7,7 @@ void ImgMnj::ResetD(void)
 	drawListImg_.clear();
 }
 
-void ImgMnj::AddImg(std::string que, Vector2 pos, int num)
+void ImgMnj::AddImg(std::wstring que, Vector2 pos, int num)
 {
 	GetGH(que);
 	std::pair<Vector2, int> tp1 = { pos,num };
@@ -15,7 +15,7 @@ void ImgMnj::AddImg(std::string que, Vector2 pos, int num)
 	drawListImg_.emplace_back(tp);
 }
 
-int ImgMnj::GetGH(std::string que)
+int ImgMnj::GetGH(std::wstring que)
 {
 	if (imgHMap_.find(que) == imgHMap_.end())
 	{

@@ -7,7 +7,7 @@ void SoundMnj::ResetD(void)
 	seList_.clear();
 }
 
-void SoundMnj::AddBGM(std::string que)
+void SoundMnj::AddBGM(std::wstring que)
 {
 	SetCreate3DSoundFlag(FALSE);
 	bgmH_ = LoadSoundMem(que.c_str());
@@ -15,12 +15,12 @@ void SoundMnj::AddBGM(std::string que)
 	ChangeVolumeSoundMem(255 * 30 / 100, bgmH_);
 }
 
-void SoundMnj::AddSE(std::string que,VECTOR pos,float Dis)
+void SoundMnj::AddSE(std::wstring que,VECTOR pos,float Dis)
 {
 	CheckSEList(que);
 
 	//PlaySoundMem(seHMap_[que], DX_PLAYTYPE_NORMAL);
-	seList_.emplace_back(std::pair<std::string, std::pair<VECTOR, float>>(que, std::pair<VECTOR, float>(pos, Dis)));
+	seList_.emplace_back(std::pair<std::wstring, std::pair<VECTOR, float>>(que, std::pair<VECTOR, float>(pos, Dis)));
 
 }
 
@@ -41,7 +41,7 @@ void SoundMnj::Run(void)
 	}
 }
 
-bool SoundMnj::CheckSEList(std::string que)
+bool SoundMnj::CheckSEList(std::wstring que)
 {
 	if (seHMap_.find(que) == seHMap_.end())
 	{

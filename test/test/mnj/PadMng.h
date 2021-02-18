@@ -1,6 +1,6 @@
 #pragma once
 #include<DxLib.h>
-#include "Scene/sceneMng.h"
+#include "masterMnj.h"
 
 #define LpPadMng PadMng::GetInstance()
 
