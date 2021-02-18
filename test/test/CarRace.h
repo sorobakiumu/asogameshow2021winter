@@ -10,7 +10,7 @@ class CarRace :
 public:
 	CarRace();
 	~CarRace();
-	void Run() override;
+	void Run(std::shared_ptr<BaseGame>& baseGame) override;
 	void Draw() override;
 	void Init() override;
 private:

@@ -1,8 +1,9 @@
 #include "WorldSoccer.h"
+#include "Result.h"
 #include <DxLib.h>
 #include<random>
 
-void WorldSoccer::Run()
+void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 {
 	downpt = std::rand() % 350+225;
 	if (flame % 60 == 0) {
@@ -37,6 +38,10 @@ void WorldSoccer::Run()
 				life--;
 			}
 		}
+	}
+	if (CheckHitKey(KEY_INPUT_5)) {
+		baseGame = std::make_shared<Result>();
+		baseGame->Init();
 	}
 }
 

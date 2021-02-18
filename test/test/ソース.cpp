@@ -7,6 +7,7 @@
 #include "CarRace.h"
 #include "JankenPon.h"
 #include "WorldSoccer.h"
+#include "Title.h"
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
@@ -27,12 +28,12 @@ int main()
 	}
 	ClsDrawScreen();
 
-	game_ = std::make_shared<WorldSoccer>();
+	game_ = std::make_shared<Title>();
 	game_->Init();
 
 	while (ProcessMessage() != -1)
 	{
-		game_->Run();
+		game_->Run(game_);
 		ClsDrawScreen();
 		game_->Draw();
 		ScreenFlip();
