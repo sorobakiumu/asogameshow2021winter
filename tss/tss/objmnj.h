@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <map>
+#include <string>
 #include "obj.h"
 
 
@@ -44,17 +46,49 @@ public:
 
 	void ReSetD(void);	//毎フレーム最初に呼ぶ
 
-	void Setobjpos(VECTOR pos, VECTOR vec, UNIT_ID id, int num);	//位置情報をセット idで、判別
+	/// <summary>
+	/// 位置情報をセット idで、判別
+	/// </summary>
+	/// <param name="pos">座標</param>
+	/// <param name="vec"></param>
+	/// <param name="id">名前</param>
+	/// <param name="num"></param>
+	void Setobjpos(VECTOR pos, VECTOR vec, std::string id, int num);
+	
+	/// <summary>
+	/// 位置情報を返す。
+	/// </summary>
+	/// <param name="id">ファイル</param>
+	/// <param name="num"></param>
+	/// <returns></returns>
+	VECTOR Getobjpos(std::string id);
 
-	int Getobjpos(VECTOR pos, UNIT_ID id, int num);					//位置情報を返す。
+	/// <summary>
+	/// //これを呼ぶと、描画要求を、sceneマネージャにします
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="num"></param>
+	void ObjDraw(std::string id, int num);								
 
-	UNIT_ID CheckHit(UNIT_ID id, int num);							//あったってるか確認用**現在使用不可**								
+	/// <summary>
+	/// オブジェクトを回転させる！//回転情報（見た目）をセット
+	/// </summary>
+	/// <param name="id">ファイル名</param>
+	/// <param name="moveangle">あんぐる</param>
+	void ObjRotation(std::string id,float moveangle);			
 
-	void ObjDraw(UNIT_ID id, int num);								//これを呼ぶと、描画要求を、sceneマネージャにします
+	/// <summary>
+	/// オブジェクトを追加！例のごとくファイル名はタグになるぞ！
+	/// </summary>
+	/// <param name="que"></param>
+	/// <param name="num"></param>
+	void AddObj(std::string que, int num = 0);
 
-	void ObjRotation(UNIT_ID id,float moveangle, int num);			//回転情報（見た目）をセット
-
-
+	/// <summary>
+	/// てんきゅう
+	/// </summary>
+	/// <param name=""></param>
+	void update(void);
 private:
 	static Objmnj* sInstance;
 
@@ -62,13 +96,14 @@ private:
 	std::vector<int> _drawList;						//描画するものを溜めておくキュー
 	std::vector<int> _drawListnex;					//描画するものを溜めておくキュー（すける）
 
-	int		issobj;					//壁格納用
-	int		playerobj;				//ﾌﾟﾚｲﾔモデル格納用
-	int		phitobj;				//ﾌﾟﾚｲﾔ当たり判定モデル格納用
+	std::map<std::string, int> objHMap_;
+	//int		issobj;					//壁格納用
+	//int		playerobj;				//ﾌﾟﾚｲﾔモデル格納用
+	//int		phitobj;				//ﾌﾟﾚｲﾔ当たり判定モデル格納用
 	int		skyobj;					//空
-	int		mapmodel;				//海モデル格納用
-	VECTOR	pvec;					//プレイヤ移動ベクトル
-	VECTOR	ppos;					//プレイヤー座標
+	//int		mapmodel;				//海モデル格納用
+	//VECTOR	pvec;					//プレイヤ移動ベクトル
+	//VECTOR	ppos;					//プレイヤー座標
 
 	UNIT_ID	player;					//ﾌﾟﾚｲﾔモデル格納用
 

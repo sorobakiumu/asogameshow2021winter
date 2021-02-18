@@ -2,6 +2,7 @@
 #include <tuple>
 #include <vector>
 #include <DxLib.h>
+#include <EffekseerForDXLib.h>
 #include "Vector2.h"
 
 using effmap = std::map<std::string,int>;
