@@ -10,8 +10,6 @@
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
-	std::shared_ptr<WorldSoccer> worldSoccer_;
-	std::shared_ptr<JankenPon> jankenpon_;
 }
 
 enum class GameMode
@@ -29,7 +27,7 @@ int main()
 	}
 	ClsDrawScreen();
 
-	game_ = std::make_shared<JankenPon>();
+	game_ = std::make_shared<WorldSoccer>();
 	game_->Init();
 
 	while (ProcessMessage() != -1)
