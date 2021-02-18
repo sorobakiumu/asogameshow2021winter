@@ -1,5 +1,6 @@
 #include "CarRace.h"
 #include <DxLib.h>
+#include "Result.h"
 
 CarRace::CarRace()
 {
@@ -9,7 +10,7 @@ CarRace::~CarRace()
 {
 }
 
-void CarRace::Run()
+void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 {
 	//à⁄ìÆì¸óÕèÓïÒ
 	key = CheckHitKey(KEY_INPUT_SPACE);
@@ -34,6 +35,10 @@ void CarRace::Run()
 		boll->vec_.y += gravity;
 		IsHit(boll, balF);
 		//ç‚ÇÃìñÇΩÇËîªíË
+	}
+	if (CheckHitKey(KEY_INPUT_5)){
+		baseGame = std::make_shared<Result>();
+		baseGame->Init();
 	}
 }
 

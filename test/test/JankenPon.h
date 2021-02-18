@@ -57,7 +57,7 @@ public:
 	/// ‚°[‚Ş‚é[‚Õ
 	/// </summary>
 	/// <param name=""></param>
-	void Run(void) override;
+	void Run(std::shared_ptr<BaseGame>& baseGame) override;
 
 	/// <summary>
 	/// ‚Ñ‚å‚¤‚ª
