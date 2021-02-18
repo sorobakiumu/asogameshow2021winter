@@ -8,6 +8,7 @@
 #include <random>
 #include <time.h>
 #include "JankenPon.h"
+#include "Result.h"
 
 JankenPon::JankenPon()
 {
@@ -35,7 +36,7 @@ JankenPon::~JankenPon()
 	}
 }
 
-void JankenPon::Run(void)
+void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 {
 	switch (nowmode_)
 	{
@@ -53,6 +54,10 @@ void JankenPon::Run(void)
 		break;
 	default:
 		break;
+	}
+	if (CheckHitKey(KEY_INPUT_5)) {
+		baseGame = std::make_shared<Result>();
+		baseGame->Init();
 	}
 }
 
