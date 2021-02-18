@@ -15,7 +15,7 @@ private:
 	void IsHit(std::shared_ptr<Boll>& boll);
 	void hollIsHit(std::shared_ptr<Boll>& boll);
 	const float pinsize = 2.5f;
-	const int startnum = 5;
+	const int startnum = 4;
 	const int ynum = 4;
 	const float xoffset = 200;
 	const float xgameScreen = 400;

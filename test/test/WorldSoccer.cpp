@@ -58,8 +58,8 @@ void WorldSoccer::Draw()
 			DrawCircle(b->pos_.x, b->pos_.y, bollR, 0x000000, false, true);
 		}
 	}
-	DrawBox(800 / 2 - 200, 0, 800 / 2 - 200 + bollR * 2, 350, 0x000000, true);
-	DrawBox(800 / 2 + 200 - bollR * 2, 0, 800 / 2 + 200, 350, 0x000000, true);
+	//DrawBox(800 / 2 - 200, 0, 800 / 2 - 200 + bollR * 2, 350, 0x000000, true);
+	//DrawBox(800 / 2 + 200 - bollR * 2, 0, 800 / 2 + 200, 350, 0x000000, true);
 
 	//打ちだし場所の描画(デバッグ用)
 	DrawCircle(downpt, 20, 20, 0x000000, false, true);
@@ -94,9 +94,9 @@ void WorldSoccer::PinInit()
 		for (int x = 0; x < xnum; x++) {
 			auto xnumoffset = 50;
 			if (xnum != startnum) {
-				xnumoffset = 25;
+				xnumoffset /= 2;
 			}
-			pinPositions.emplace_back(Vector2(xoffset + xnumoffset + 70 * x, 100 + 70 * y));
+			pinPositions.emplace_back(Vector2(xoffset + xnumoffset + 70 * x+30, 100 + 70 * y));
 		}
 	}
 }
