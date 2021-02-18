@@ -36,6 +36,12 @@ public:
 
 	void ResetD(void);
 
+	/// <summary>
+	/// 描画要請
+	/// </summary>
+	/// <param name="que">名前！</param>
+	/// <param name="pos">座標！</param>
+	/// <param name="num">左右反転するなら０以外入れること。しないなら無視可</param>
 	void AddImg(std::string que, Vector2 pos, int num = 0);
 
 	int GetGH(std::string que);

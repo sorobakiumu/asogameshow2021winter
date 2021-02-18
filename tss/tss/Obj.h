@@ -5,8 +5,6 @@
 enum class UNIT_ID			//それぞれの立場
 {
 	PLAYER,	//プレイヤーキャラ
-	CPU,	//プレイヤー操作じゃないキャラ
-	BULLET,	//弾
 	NON,	//未割当
 	MAX,	
 };
@@ -50,6 +48,7 @@ public:
 	{
 		return 0;
 	}
+
 protected:
 	VECTOR pos_;	//座標格納
 	UNIT_ID unitID_;	//ユニットID格納
