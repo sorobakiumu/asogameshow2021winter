@@ -33,11 +33,11 @@ void EffekseerCtl::SetEffect(std::string id, VECTOR pos)
 void EffekseerCtl::Drow(void)
 {
 	// Effekseerにより再生中のエフェクトを描画する。
-	DrawEffekseer3D();
+	DrawEffekseer2D();
 }
 
 void EffekseerCtl::Updata(void)
 {	
 	// Effekseerにより再生中のエフェクトを更新する。
-	DrawEffekseer3D();
+	UpdateEffekseer2D();
 }

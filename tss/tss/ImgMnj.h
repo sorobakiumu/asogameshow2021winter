@@ -44,8 +44,17 @@ public:
 	/// <param name="num">左右反転するなら０以外入れること。しないなら無視可</param>
 	void AddImg(std::string que, Vector2 pos, int num = 0);
 
+	/// <summary>
+	/// まず初めにこいつで登録しておくこと！
+	/// </summary>
+	/// <param name="que">ファイル名！タグになるからわかりやすい名前つけろ！</param>
+	/// <returns></returns>
 	int GetGH(std::string que);
 
+	/// <summary>
+	/// 描画！
+	/// </summary>
+	/// <param name=""></param>
 	void Draw(void);
 
 private:

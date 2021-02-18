@@ -41,7 +41,7 @@ void Objmnj::Setobjpos(VECTOR pos, VECTOR vec, std::string id, int num)
 	}
 }
 
-VECTOR Objmnj::Getobjpos(std::string id, int num)
+VECTOR Objmnj::Getobjpos(std::string id)
 {
 	for (auto dat : objHMap_)
 	{
@@ -64,7 +64,7 @@ void Objmnj::ObjDraw(std::string id, int num)
 	}
 }
 
-void Objmnj::ObjRotation(std::string id, float moveangle, int num)
+void Objmnj::ObjRotation(std::string id, float moveangle)
 {
 	for (auto dat : objHMap_)
 	{
