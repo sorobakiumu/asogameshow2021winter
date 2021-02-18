@@ -29,7 +29,7 @@ int main()
 	}
 	ClsDrawScreen();
 
-	game_ = std::make_shared<WorldSoccer>();
+	game_ = std::make_shared<JankenPon>();
 	game_->Init();
 
 	while (ProcessMessage() != -1)
