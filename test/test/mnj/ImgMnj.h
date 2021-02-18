@@ -4,6 +4,7 @@
 #include "../Geometry.h"
 #include <string>
 #include <map>
+#include<tuple>
 
 #define lpImglMng ImgMnj::GetInstance()
 
@@ -36,7 +37,8 @@ public:
 
 	void ResetD(void);
 
-	void AddImg(std::wstring que, Vector2 pos, int num = 0);
+	void AddImg(std::wstring que, Vector2 pos, float angle = 0,bool flag = true);
+
 
 	int GetGH(std::wstring que);
 
@@ -44,7 +46,7 @@ public:
 
 private:
 	static ImgMnj* sInstance;
-	std::vector < std::pair<int, std::pair<Vector2,int>> > drawListImg_;					//描画するものを溜めておくキュー（画像）
+	std::vector < std::tuple<int, Vector2,float,bool> > drawListImg_;					//描画するものを溜めておくキュー（画像）
 	std::map<std::wstring, int> imgHMap_;
 
 	ImgMnj();

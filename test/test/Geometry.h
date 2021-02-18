@@ -44,10 +44,13 @@ float GetRadian(std::pair<Vector2, Vector2> hillPos);
 
 Vector2 RefLectVec(const Vector2& i, const Vector2& n);
 
+void FloorVec(Vector2& vec, float value);
+
 class Boll {
 public:
 	Vector2 pos_;
 	Vector2 vec_;
+	float angle_ = 0.0f;
 
 	Boll(Vector2 pos) {
 		pos_ = pos;
@@ -57,3 +60,4 @@ public:
 	bool alive = true;
 private:
 };
+void BollRadian(std::shared_ptr<Boll>& boll);

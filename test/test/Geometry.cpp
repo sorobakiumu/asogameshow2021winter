@@ -103,3 +103,20 @@ Vector2 RefLectVec(const Vector2& i, const Vector2& n)
 	Vector2 r = i - Vector2(n.x * (Dot(i, n) * 2), n.y * (Dot(i, n) * 2));
 	return r;
 }
+
+void FloorVec(Vector2& vec, float value)
+{
+		if (value > vec.y) {
+			vec.y = 0;
+		}
+		if (value > vec.x) {
+			vec.x = 0;
+		}
+}
+
+void BollRadian(std::shared_ptr<Boll>& boll)
+{
+	auto bollR = 20.0f;
+	 auto tmp = ((180 / bollR) * boll->vec_.x) * (3.14 / 180);
+	 boll->angle_ += tmp;
+}

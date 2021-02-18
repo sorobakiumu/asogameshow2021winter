@@ -7,11 +7,10 @@ void ImgMnj::ResetD(void)
 	drawListImg_.clear();
 }
 
-void ImgMnj::AddImg(std::wstring que, Vector2 pos, int num)
+void ImgMnj::AddImg(std::wstring que, Vector2 pos, float angle, bool flag)
 {
 	GetGH(que);
-	std::pair<Vector2, int> tp1 = { pos,num };
-	std::pair<int, std::pair<Vector2, int>> tp = { GetGH(que),tp1 };
+	std::tuple<int, Vector2, float, bool> tp = { GetGH(que), pos, angle, flag };
 	drawListImg_.emplace_back(tp);
 }
 
@@ -20,7 +19,6 @@ int ImgMnj::GetGH(std::wstring que)
 	if (imgHMap_.find(que) == imgHMap_.end())
 	{
 		imgHMap_.try_emplace(que, LoadGraph(que.c_str(), true));
-
 	}
 	return imgHMap_[que];
 }
@@ -29,9 +27,12 @@ void ImgMnj::Draw(void)
 {
 	for (auto dQue : drawListImg_)
 	{
-		bool f = true;
-		dQue.second.second == 0 ? f = false : f = true;
-		DxLib::DrawRotaGraph(dQue.second.first.x, dQue.second.first.y,1.0f,0.0f, dQue.first, true,f);
+		int handle;
+		Vector2 pos;
+		float angle;
+		bool turnFlag;
+		std::tie(handle, pos, angle, turnFlag) = dQue;
+		DxLib::DrawRotaGraph(pos.x, pos.y,1.0f,angle, handle, true,turnFlag);
 	}
 }
 
