@@ -72,7 +72,6 @@ void WorldSoccer::Draw()
 	}
 	DrawCircle(holl.x, holl.y, hollR, 0x000000, true, true);
 
-
 	DrawFormatString(0, 0, 0xffffff, L"スコア　%d", score);
 	DrawFormatString(0, 20, 0xffffff, L"ライフ　%d", life);
 }
