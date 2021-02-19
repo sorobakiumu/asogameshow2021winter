@@ -11,6 +11,7 @@
 #include <EffekseerForDXLib.h>
 #include "mnj/ImgMnj.h"
 #include "Coins.h"
+#include "mnj/SoundMnj.h"
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
@@ -66,6 +67,7 @@ int main()
 	game_->Init();
 	oldgame_ = game_;
 
+	int transSE = LoadSoundMem(L"Resource/music/trans.mp3");
 	while (ProcessMessage() != -1)
 	{
 		if (trans) {
@@ -83,7 +85,7 @@ int main()
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 				ScreenFlip();
 			}
-			else if (transflame > maxtrans / 2) {
+			else if (transflame >= maxtrans / 2) {
 				ClsDrawScreen();
 				game_->Draw();
 				lpImglMng.Draw();
@@ -106,6 +108,7 @@ int main()
 			ClsDrawScreen();
 			if (game_ != tmpGame) {
 				tmpGame->Draw();
+				PlaySoundMem(transSE,DX_PLAYTYPE_BACK);
 			}
 			else {
 				game_->Draw();
@@ -123,7 +126,6 @@ int main()
 		}
 		oldgame_ = game_;
 	}
-
 }
 
 
