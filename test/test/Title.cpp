@@ -13,6 +13,8 @@ void Title::Run(std::shared_ptr<BaseGame>& baseGame)
 void Title::Draw()
 {
 	DrawFormatString(0, 0, 0xffffff, L"title");
+	//ƒQ[ƒ€ƒGƒŠƒA‚Ì•`‰æ
+	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 }
 
 void Title::Init()

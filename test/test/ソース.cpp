@@ -14,6 +14,12 @@
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
+	std::shared_ptr<BaseGame> oldgame_;
+
+	std::shared_ptr<BaseGame> screen_;
+	bool trans=false;
+	int transflame = 0;
+	const int maxtrans = 128;
 }
 
 int main()
@@ -58,17 +64,64 @@ int main()
 
 	game_ = std::make_shared<Title>();
 	game_->Init();
+	oldgame_ = game_;
 
 	while (ProcessMessage() != -1)
 	{
-		game_->Run(game_);
-		ClsDrawScreen();
-		game_->Draw();
-		lpImglMng.Draw();
-		lpImglMng.ResetD();
-		DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡", Coins::GetInstance().coins);
-		DrawFormatString(0, 70, 0xffffff, L"ticket = %d‰~•ª", Coins::GetInstance().kinken);
-		ScreenFlip();
+		if (trans) {
+			transflame++;
+			if (transflame < maxtrans / 2) {
+				ClsDrawScreen();
+				screen_->Draw();
+				lpImglMng.Draw();
+				lpImglMng.ResetD();
+				DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡", Coins::GetInstance().coins);
+				DrawFormatString(0, 70, 0xffffff, L"ticket = %d‰~•ª", Coins::GetInstance().kinken);
+				DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, transflame*4);
+				DrawBox(0, 0, 800, 600, GetColor(255, 255, 255), TRUE);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				ScreenFlip();
+			}
+			else if (transflame > maxtrans / 2) {
+				ClsDrawScreen();
+				game_->Draw();
+				lpImglMng.Draw();
+				lpImglMng.ResetD();
+				DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡", Coins::GetInstance().coins);
+				DrawFormatString(0, 70, 0xffffff, L"ticket = %d‰~•ª", Coins::GetInstance().kinken);
+				DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255-(transflame-maxtrans/2)*4);
+				DrawBox(0, 0, 800, 600, GetColor(255, 255, 255), TRUE);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				ScreenFlip();
+			}
+			if (transflame > maxtrans) {
+				trans = false;
+			}
+		}
+		else {
+			auto tmpGame = game_;
+			game_->Run(game_);
+			ClsDrawScreen();
+			if (game_ != tmpGame) {
+				tmpGame->Draw();
+			}
+			else {
+				game_->Draw();
+			}
+			lpImglMng.Draw();
+			lpImglMng.ResetD();
+			DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡", Coins::GetInstance().coins);
+			DrawFormatString(0, 70, 0xffffff, L"ticket = %d‰~•ª", Coins::GetInstance().kinken);
+			ScreenFlip();
+		}
+		if (oldgame_ != game_) {
+			trans = true;
+			transflame = 0;
+			screen_ = oldgame_;
+		}
+		oldgame_ = game_;
 	}
 
 }

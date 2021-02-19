@@ -23,6 +23,8 @@ void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 void GameSel::Draw()
 {
 	DrawFormatString(0, 0, 0xffffff, L"gameSel");
+	//ƒQ[ƒ€ƒGƒŠƒA‚Ì•`‰æ
+	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 }
 
 void GameSel::Init()
