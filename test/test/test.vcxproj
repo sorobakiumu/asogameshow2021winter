@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="BaseGame.cpp" />
     <ClCompile Include="CarRace.cpp" />
+    <ClCompile Include="GameSel.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="JankenPon.cpp" />
     <ClCompile Include="mnj\masterMnj.cpp" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="CarRace.h" />
+    <ClInclude Include="GameSel.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="JankenPon.h" />
     <ClInclude Include="mnj\masterMnj.h" />
