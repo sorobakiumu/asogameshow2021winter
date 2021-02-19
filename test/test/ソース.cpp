@@ -10,6 +10,7 @@
 #include "Title.h"
 #include <EffekseerForDXLib.h>
 #include "mnj/ImgMnj.h"
+#include "Coins.h"
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
@@ -65,6 +66,7 @@ int main()
 		game_->Draw();
 		lpImglMng.Draw();
 		lpImglMng.ResetD();
+		DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡, ticket = %d‰~•ª", Coins::GetInstance().coins, Coins::GetInstance().coins);
 		ScreenFlip();
 	}
 
