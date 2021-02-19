@@ -31,6 +31,7 @@ private:
 	const int hollmax_x = 600 - hollR;
 	const int hollmin_y = 400;
 	const int hollmax_y = 600 - hollR;
+	bool gamestart = false;
 	int score = 0;
 	int life = 5;
 

@@ -28,3 +28,11 @@ void GameSel::Draw()
 void GameSel::Init()
 {
 }
+
+GameSel::GameSel()
+{
+}
+
+GameSel::~GameSel()
+{
+}

@@ -2,46 +2,65 @@
 #include "Result.h"
 #include <DxLib.h>
 #include<random>
+#include"GameSel.h"
+#include "Coins.h"
 
 void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 {
-	downpt = std::rand() % 350+225;
-	if (flame % 60 == 0) {
-		bolls.emplace_back(new Boll({ downpt,1.0f }));
-	}
-	flame++;
-	printf("射出場所＝[%f]\n", downpt);
-	
+	downpt = std::rand() % 200+300;
 	int x, y;
 	GetMousePoint(&x, &y);
 	holl.x = max(min(x, hollmax_x), hollmin_x);
-	//holl.y = max(min(y, hollmax_y), hollmin_y);
+	if (gamestart) {
+		if (flame % 60 == 0) {
+			bolls.emplace_back(new Boll({ downpt,1.0f }));
+		}
+		flame++;
+		printf("射出場所＝[%f]\n", downpt);
 
-	//当たり判定
-	for (auto boll : bolls) {
-		boll->vec_.y += gravity;
-		IsHit(boll);
-	}
-	for (auto b : bolls) {
-		b->updata();
-		if (b->pos_.x - bollR < xoffset) {
-			b->pos_.x = xoffset + bollR;
+		//当たり判定
+		for (auto boll : bolls) {
+			boll->vec_.y += gravity;
+			IsHit(boll);
 		}
-		else if (b->pos_.x + bollR > xoffset + 400) {
-			b->pos_.x = xoffset + 400 - bollR;
+		for (auto b : bolls) {
+			b->updata();
+			if (b->pos_.x - bollR < xoffset) {
+				b->pos_.x = xoffset + bollR;
+			}
+			else if (b->pos_.x + bollR > xoffset + 400) {
+				b->pos_.x = xoffset + 400 - bollR;
+			}
 		}
-	}
-	for (auto boll : bolls) {
-		if (boll->alive) {
-			if (boll->pos_.y > 600 + bollR) {
-				boll->alive = false;
-				life--;
+		for (auto boll : bolls) {
+			if (boll->alive) {
+				if (boll->pos_.y > 600 + bollR) {
+					boll->alive = false;
+					life--;
+				}
 			}
 		}
 	}
 	if (CheckHitKey(KEY_INPUT_5)) {
-		baseGame = std::make_shared<Result>();
+		baseGame = std::make_shared<GameSel>();
 		baseGame->Init();
+	}
+	if (life <= 0&&gamestart) {
+		gamestart = false;
+		for(auto boll:bolls){
+			boll->vec_ = {};
+		}
+		int c = score / 1000;
+		Coins::GetInstance().coins += c;
+	}
+	if (!gamestart) {
+		if (CheckHitKey(KEY_INPUT_SPACE)) {
+			gamestart = true;
+			life = 5;
+			score = 0;
+			Coins::GetInstance().coins--;
+			bolls.clear();
+		}
 	}
 }
 
@@ -49,11 +68,11 @@ void WorldSoccer::Draw()
 {
 	//ゲームエリアの描画
 	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
-	//DrawBox(800 / 2 - 200, 0, 800 / 2 - 200 + bollR*2, 350, 0x777777, true);
-	//DrawBox(800 / 2 + 200-bollR*2, 0, 800 / 2 + 200, 350, 0x777777, true);
 
 	DrawBox(hollmin_x, holl.y - hollR / 2, hollmax_x, holl.y + hollR / 2, 0xb8860b, true);
 	DrawBox(hollmin_x + bollR, holl.y - hollR / 2 + bollR, hollmax_x - bollR, holl.y + hollR / 2 - bollR, 0xffffff, true);
+
+	
 
 	//ボールの描画
 	for (auto b : bolls) {
@@ -63,8 +82,6 @@ void WorldSoccer::Draw()
 			DrawCircle(b->pos_.x, b->pos_.y, bollR, 0x000000, false, true);
 		}
 	}
-	//DrawBox(800 / 2 - 200, 0, 800 / 2 - 200 + bollR * 2, 350, 0x000000, true);
-	//DrawBox(800 / 2 + 200 - bollR * 2, 0, 800 / 2 + 200, 350, 0x000000, true);
 
 	//打ちだし場所の描画(デバッグ用)
 	DrawCircle(downpt, 20, 20, 0x000000, false, true);
@@ -77,6 +94,11 @@ void WorldSoccer::Draw()
 	}
 	DrawCircle(holl.x, holl.y, hollR, 0x000000, true, true);
 
+	if (!gamestart) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 
 	DrawFormatString(0, 0, 0xffffff, L"スコア　%d", score);
 	DrawFormatString(0, 20, 0xffffff, L"ライフ　%d", life);

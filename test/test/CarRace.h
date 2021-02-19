@@ -21,6 +21,8 @@ private:
 
 	void wallIsHit(std::shared_ptr<Boll>& boll);
 
+	void GoalIsHit(std::shared_ptr<Boll>& boll);
+
 	void gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2> hillPos);
 	std::vector<std::pair<Vector2, Vector2>> HillPositions;
 	std::vector<Vector2> hollPosition;
@@ -45,7 +47,7 @@ private:
 	float hollR = bollR + 5;
 	bool oldkey = false;
 	bool key = false;
-	float downpt = 400;
+	const float downpt = 600-bollR*3;
 
 	bool balF = false;
 };

@@ -2,6 +2,8 @@
 #include <DxLib.h>
 #include "Result.h"
 #include "mnj/ImgMnj.h"
+#include "Coins.h"
+#include "GameSel.h"
 
 CarRace::CarRace()
 {
@@ -18,18 +20,14 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 	key = CheckHitKey(KEY_INPUT_SPACE);
 	if (!balF)
 		if ((key == true) && (oldkey == true)) {
+			Coins::GetInstance().coins--;
+			if (Coins::GetInstance().coins < 0) {
+				baseGame = std::make_shared<Result>();
+				baseGame->Init();
+			}
 			bolls.emplace_back(new Boll({ downpt,1.0f }));
 			balF = true;
 		}
-	if (CheckHitKey(KEY_INPUT_RIGHT))
-	{
-		downpt += 3;
-		printf("射出場所＝[%f]\n", downpt);
-	}
-	else if (CheckHitKey(KEY_INPUT_LEFT)) {
-		downpt -= 3;
-		printf("射出場所＝[%f]\n", downpt);
-	}
 	oldkey = key;
 
 	//当たり判定
@@ -44,16 +42,15 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 		b->updata();
 		if (b->pos_.x <= xoffset + bollR) {
 			b->pos_.x = xoffset + bollR;
-			b->vec_ = {};
+			b->vec_.x = {};
 		}
 		else if (b->pos_.x >= xoffset + 400 - bollR) {
 			b->pos_.x = xoffset + 400 - bollR;
-			b->vec_ = {};
+			b->vec_.x = {};
 		}
 		if (b->pos_.y > 600 || !b->alive) {
 			bolls.clear();
 			balF = false;
-			b->alive = true;
 		}
 	}
 
@@ -63,8 +60,9 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 		lpImglMng.AddImg(L"Resource/image/coins.png", boll->pos_,boll->angle_);
 	}
 
+	//シーン移行（デバッグ）
 	if (CheckHitKey(KEY_INPUT_5)) {
-		baseGame = std::make_shared<Result>();
+		baseGame = std::make_shared<GameSel>();
 		baseGame->Init();
 	}
 }
@@ -92,6 +90,12 @@ void CarRace::Draw()
 	DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 	//ボールの更新
 	bam(powP);
+
+	if (bolls.empty()) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 }
 
 void CarRace::Init()
@@ -124,6 +128,7 @@ void CarRace::IsHit(std::shared_ptr<Boll>& boll, bool& balF)
 	HillIsHit(boll);
 	hollIsHit(boll, balF);
 	wallIsHit(boll);
+	GoalIsHit(boll);
 }
 
 void CarRace::HillIsHit(std::shared_ptr<Boll>& boll)
@@ -196,6 +201,18 @@ void CarRace::wallIsHit(std::shared_ptr<Boll>& boll)
 				}
 			}
 		}
+	}
+}
+
+void CarRace::GoalIsHit(std::shared_ptr<Boll>& boll)
+{
+	if (wallPositions[0].first.x < boll->pos_.x&&
+		wallPositions[1].first.x > boll->pos_.x&&
+		600-bollR<boll->pos_.y&&
+		boll->alive)
+	{
+		Coins::GetInstance().kinken += 50;
+		boll->alive = false;
 	}
 }
 

@@ -66,7 +66,8 @@ int main()
 		game_->Draw();
 		lpImglMng.Draw();
 		lpImglMng.ResetD();
-		DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡, ticket = %d‰~•ª", Coins::GetInstance().coins, Coins::GetInstance().coins);
+		DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡", Coins::GetInstance().coins);
+		DrawFormatString(0, 70, 0xffffff, L"ticket = %d‰~•ª", Coins::GetInstance().kinken);
 		ScreenFlip();
 	}
 

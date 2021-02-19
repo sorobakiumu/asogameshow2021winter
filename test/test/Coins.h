@@ -30,5 +30,7 @@ public:
 	int kinken = 0;
 private:
 	static Coins* sInstance;
+	Coins();
+	~Coins();
 };
 
