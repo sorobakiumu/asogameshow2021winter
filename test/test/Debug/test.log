@@ -1,5 +1,2 @@
-﻿  ソース.cpp
-C:\Users\Owner\Desktop\新しいフォルダー (2)\asogameshow2021winter\test\test\WorldSoccer.h(30,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
-C:\Users\Owner\Desktop\新しいフォルダー (2)\asogameshow2021winter\test\test\WorldSoccer.h(31,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
-C:\Users\Owner\Desktop\新しいフォルダー (2)\asogameshow2021winter\test\test\WorldSoccer.h(33,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+﻿  Title.cpp
   test.vcxproj -> C:\Users\Owner\Desktop\新しいフォルダー (2)\asogameshow2021winter\test\Debug\test.exe

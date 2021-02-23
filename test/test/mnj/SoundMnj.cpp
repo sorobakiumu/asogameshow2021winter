@@ -1,4 +1,5 @@
 #include "SoundMnj.h"
+#include <assert.h>
 
 SoundMnj* SoundMnj::sInstance = nullptr;
 
@@ -50,6 +51,17 @@ bool SoundMnj::CheckSEList(std::wstring que)
 		return true;
 	}
 	return false;
+}
+
+void SoundMnj::StopBgm()
+{
+	if (bgmH_ != -1)
+	{
+		if (CheckSoundMem(bgmH_) != 1)
+		{
+			StopSoundMem(bgmH_);
+		}
+	}
 }
 
 SoundMnj::SoundMnj()

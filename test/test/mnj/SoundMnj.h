@@ -43,6 +43,8 @@ public:
 	void Run(void);
 
 	bool CheckSEList(std::wstring que);//w’è‚µ‚½SE‚ğ‚·‚Å‚É“Ç‚İ‚ñ‚Å‚ ‚é‚©’²‚×‚é
+
+	void StopBgm();
 private:
 	static SoundMnj* sInstance;
 

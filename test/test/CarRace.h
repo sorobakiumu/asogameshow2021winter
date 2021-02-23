@@ -47,7 +47,7 @@ private:
 	float hollR = bollR + 5;
 	bool oldkey = false;
 	bool key = false;
-	const float downpt = 600-bollR*3;
+	const float downpt = 600 - bollR * 3;
 
 	bool balF = false;
 };
