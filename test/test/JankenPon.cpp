@@ -38,6 +38,10 @@ JankenPon::~JankenPon()
 
 void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 {
+	if (initflag) {
+		PlaySoundMem(gcpsound,DX_PLAYTYPE_LOOP);
+		initflag = false;
+	}
 	switch (nowmode_)
 	{
 	case STAY:
@@ -58,6 +62,7 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 	if (CheckHitKey(KEY_INPUT_5)) {
 		baseGame = std::make_shared<Result>();
 		baseGame->Init();
+		StopSoundMem(gcpsound);
 	}
 }
 
@@ -199,7 +204,8 @@ void JankenPon::Init(void)
 		} while (!tfile.eof());
 		tfile.close();
 	}
-
+	initflag = true;
+	LoadSoundMem(L"Resource/music/gcp.mp3");
 }
 
 void JankenPon::SetAct(void)

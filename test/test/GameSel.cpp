@@ -4,8 +4,15 @@
 #include "CarRace.h"
 #include "JankenPon.h"
 
+int gameselbgm;
+
 void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 {
+	if (initflag) {
+		PlaySoundMem(gameselbgm, DX_PLAYTYPE_LOOP);
+		initflag = false;
+	}
+	auto tmp = baseGame;
 	if (CheckHitKey(KEY_INPUT_1)) {
 		baseGame = std::make_shared<WorldSoccer>();
 		baseGame->Init();
@@ -18,6 +25,10 @@ void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 		baseGame = std::make_shared<JankenPon>();
 		baseGame->Init();
 	}
+	if (tmp != baseGame) {
+		StopSoundFile();
+		StopSoundMem(gameselbgm);
+	}
 }
 
 void GameSel::Draw()
@@ -29,6 +40,10 @@ void GameSel::Draw()
 
 void GameSel::Init()
 {
+	if (!CheckSoundFile()) {
+		gameselbgm = LoadSoundMem(L"Resource/music/title.mp3");
+	}
+	initflag = true;
 }
 
 GameSel::GameSel()

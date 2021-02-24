@@ -124,5 +124,7 @@ private:
 
 	int res_;				//ルーレット結果（めだる報酬用）
 
+	int initflag;
+	int gcpsound;
 };
 

@@ -9,5 +9,7 @@ public:
 	void Init() override;
 	GameSel();
 	~GameSel();
+private:
+	bool initflag;
 };
 

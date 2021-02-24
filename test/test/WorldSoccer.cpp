@@ -5,8 +5,15 @@
 #include"GameSel.h"
 #include "Coins.h"
 
+int soccerbgm;
+
 void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 {
+	if (initflag) {
+		PlaySoundMem(soccerbgm,DX_PLAYTYPE_LOOP);
+		initflag = false;
+	}
+
 	downpt = std::rand() % 200+300;
 	int x, y;
 	GetMousePoint(&x, &y);
@@ -44,6 +51,7 @@ void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 	if (CheckHitKey(KEY_INPUT_5)) {
 		baseGame = std::make_shared<GameSel>();
 		baseGame->Init();
+		StopSoundMem(soccerbgm);
 	}
 	if (life <= 0&&gamestart) {
 		gamestart = false;
@@ -109,6 +117,8 @@ void WorldSoccer::Init()
 	PinInit();
 	holl.x = 400;
 	holl.y = 500;
+	initflag = true;
+	soccerbgm = LoadSoundMem(L"Resource/music/soccer.mp3");
 }
 
 void WorldSoccer::PinInit()

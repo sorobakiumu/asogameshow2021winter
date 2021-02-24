@@ -50,4 +50,6 @@ private:
 	const float downpt = 600 - bollR * 3;
 
 	bool balF = false;
+
+	bool initflag;
 };

@@ -34,6 +34,6 @@ private:
 	bool gamestart = false;
 	int score = 0;
 	int life = 5;
-
+	bool initflag;
 };
 

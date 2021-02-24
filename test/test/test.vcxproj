@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,9 +150,9 @@
     <ClCompile Include="GameSel.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="JankenPon.cpp" />
+    <ClCompile Include="mnj\ImgMnj.cpp" />
     <ClCompile Include="mnj\masterMnj.cpp" />
     <ClCompile Include="mnj\EffekseerCtl.cpp" />
-    <ClCompile Include="mnj\ImgMnj.cpp" />
     <ClCompile Include="mnj\PadMng.cpp" />
     <ClCompile Include="mnj\SoundMnj.cpp" />
     <ClCompile Include="Result.cpp" />
@@ -166,9 +167,9 @@
     <ClInclude Include="GameSel.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="JankenPon.h" />
+    <ClInclude Include="mnj\ImgMnj.h" />
     <ClInclude Include="mnj\masterMnj.h" />
     <ClInclude Include="mnj\EffekseerCtl.h" />
-    <ClInclude Include="mnj\ImgMnj.h" />
     <ClInclude Include="mnj\PadMng.h" />
     <ClInclude Include="mnj\SoundMnj.h" />
     <ClInclude Include="Result.h" />

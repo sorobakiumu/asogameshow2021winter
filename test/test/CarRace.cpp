@@ -5,6 +5,8 @@
 #include "Coins.h"
 #include "GameSel.h"
 
+int racebgm;
+
 CarRace::CarRace()
 {
 }
@@ -16,6 +18,10 @@ CarRace::~CarRace()
 
 void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 {
+	if (initflag) {
+		PlaySoundMem(racebgm, DX_PLAYTYPE_LOOP);
+		initflag = false;
+	}
 	//ˆÚ“®“ü—Íî•ñ
 	key = CheckHitKey(KEY_INPUT_SPACE);
 	if (!balF)
@@ -64,6 +70,7 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 	if (CheckHitKey(KEY_INPUT_5)) {
 		baseGame = std::make_shared<GameSel>();
 		baseGame->Init();
+		StopSoundMem(racebgm);
 	}
 }
 
@@ -120,7 +127,8 @@ void CarRace::Init()
 		{{xoffset + 50 + hollR * 2,550} ,{xoffset + 50 + hollR * 2,600}}
 	};
 
-
+	racebgm = LoadSoundMem(L"Resource/music/car.mp3");
+	initflag = true;
 }
 
 void CarRace::IsHit(std::shared_ptr<Boll>& boll, bool& balF)

@@ -3,17 +3,12 @@
 #include "GameSel.h"
 #include "mnj/SoundMnj.h"
 
-int sound;
-
 void Title::Run(std::shared_ptr<BaseGame>& baseGame)
 {
 	if (CheckHitKey(KEY_INPUT_SPACE)) {
 		baseGame = std::make_shared<GameSel>();
 		baseGame->Init();
-		SoundMnj::GetInstance().StopBgm();
-		StopSoundMem(sound);
 	}
-	SoundMnj::GetInstance().Run();
 }
 
 void Title::Draw()
@@ -25,7 +20,5 @@ void Title::Draw()
 
 void Title::Init()
 {
-	//SoundMnj::GetInstance().AddBGM(L"Resource/music/title.mp3");
-	sound = LoadSoundMem(L"Resource/music/title.mp3");
-	PlaySoundMem(sound, DX_PLAYTYPE_LOOP);
+	PlaySoundFile(L"Resource/music/title.mp3", DX_PLAYTYPE_LOOP);
 }

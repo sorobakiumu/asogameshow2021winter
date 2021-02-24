@@ -68,7 +68,7 @@ int main()
 	oldgame_ = game_;
 
 	int transSE = LoadSoundMem(L"Resource/music/trans.mp3");
-	ChangeVolumeSoundMem(100, transSE);
+	//ChangeVolumeSoundMem(100, transSE);
 	while (ProcessMessage() != -1)
 	{
 		if (trans) {
