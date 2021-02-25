@@ -13,7 +13,7 @@ void SoundMnj::AddBGM(std::wstring que)
 	SetCreate3DSoundFlag(FALSE);
 	bgmH_ = LoadSoundMem(que.c_str());
 
-	ChangeVolumeSoundMem(255 * 30 / 100, bgmH_);
+	ChangeVolumeSoundMem(255 * 80 / 100, bgmH_);
 }
 
 void SoundMnj::AddSE(std::wstring que,VECTOR pos,float Dis)

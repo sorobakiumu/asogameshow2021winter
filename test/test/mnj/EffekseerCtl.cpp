@@ -30,7 +30,7 @@ void EffekseerCtl::SetEffect(std::string id, VECTOR pos)
 	SetPosPlayingEffekseer2DEffect(std::move(efct), pos.x, pos.y, 0);
 }
 
-void EffekseerCtl::Drow(void)
+void EffekseerCtl::Draw(void)
 {
 	// Effekseerにより再生中のエフェクトを描画する。
 	DrawEffekseer2D();

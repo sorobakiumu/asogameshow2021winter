@@ -60,11 +60,11 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 		}
 	}
 
-	//ボールの描画
-	for (auto boll : bolls) {
-		BollRadian(boll);
-		lpImglMng.AddImg(L"Resource/image/coins.png", boll->pos_,boll->angle_);
-	}
+	////ボールの描画
+	//for (auto boll : bolls) {
+	//	BollRadian(boll);
+	//	lpImglMng.AddImg(L"Resource/image/coins.png", boll->pos_,boll->angle_);
+	//}
 
 	//シーン移行（デバッグ）
 	if (CheckHitKey(KEY_INPUT_5)) {
@@ -79,30 +79,46 @@ void CarRace::Draw()
 
 	//ゲームエリアの描画
 	//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
+	lpImglMng.AddImg(L"Resource/image/tile.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource/image/CarRace.png", Vector2(800 / 2, 600 / 2-5));
 
 	//打ちだし場所の描画(デバッグ用)
-	DrawCircle(downpt, 20, 20, 0x000000, false, true);
-	
-	//坂の描画
-	for (auto h : HillPositions) {
-		DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
-	}
+#ifdef _DEBUG
+	//DrawCircle(downpt, 20, 20, 0x000000, false, true);
+	lpImglMng.AddImg(L"Resource/image/ball.png", Vector2(downpt, 20));
+#endif
+
+	////坂の描画
+	//for (auto h : HillPositions) {
+	//	DrawLine(h.first.x, h.first.y, h.second.x, h.second.y, 0x000000);
+	//}
 
 	//穴の描画
 	for (auto p : hollPosition) {
-		DrawCircle(p.x, p.y, hollR, 0x000000, true, true);
+		//DrawCircle(p.x, p.y, hollR, 0x000000, true, true);
+		lpImglMng.AddImg(L"Resource/image/hol.png", Vector2(p.x, p.y));
+
+
 	}
-	for (auto p : wallPositions) {
-		DrawLine(p.first.x, p.first.y, p.second.x, p.second.y, 0x000000);
+	//for (auto p : wallPositions) {
+	//	DrawLine(p.first.x, p.first.y, p.second.x, p.second.y, 0x000000);
+	//}
+
+	//ボールの描画
+	for (auto boll : bolls) {
+		BollRadian(boll);
+		lpImglMng.AddImg(L"Resource/image/coins.png", boll->pos_, boll->angle_);
 	}
-	DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
+
+	//DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 	//ボールの更新
 	bam(powP);
 
 	if (bolls.empty()) {
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
-		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		lpImglMng.SetDrawBoxIm();
+		//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+		//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
+		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
 

@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "GameSel.h"
 #include "mnj/SoundMnj.h"
+#include "mnj/ImgMnj.h"
 
 void Title::Run(std::shared_ptr<BaseGame>& baseGame)
 {
@@ -15,7 +16,8 @@ void Title::Draw()
 {
 	DrawFormatString(0, 0, 0xffffff, L"title");
 	//ÉQÅ[ÉÄÉGÉäÉAÇÃï`âÊ
-	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
+	lpImglMng.AddImg(L"Resource/image/agemeronnV2.png", Vector2(800 / 2, 600 / 2));
+	//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 }
 
 void Title::Init()

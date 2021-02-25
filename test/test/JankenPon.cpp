@@ -9,6 +9,7 @@
 #include <time.h>
 #include "JankenPon.h"
 #include "Result.h"
+#include "mnj/ImgMnj.h"
 
 JankenPon::JankenPon()
 {
@@ -45,15 +46,19 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 	switch (nowmode_)
 	{
 	case STAY:
+		printf_s("STAY\n");
 		StayMove();
 		break;
 	case JANK:
+		printf_s("JANK\n");
 		GameMove();
 		break;
 	case RESER:
+		printf_s("RESER\n");
 		ResultMove();
 		break;
 	case FIN:
+		printf_s("FIN\n");
 		Finmove();
 		break;
 	default:
@@ -68,21 +73,32 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 
 void JankenPon::Draw(void)
 {
+
+	lpImglMng.AddImg(L"Resource/image/tile3.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource/image/jan.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource/image/ruru.png", Vector2(800 / 2, 600 / 2));
+
 	int x = 50, y = 50;
 	switch (nowmode_)
 	{
 	case STAY:
 		if (jcon_ < 3)
 		{
-			DrawFormatString(x, y, 0xFFFFFF, L"さんかい練習するよ　Zぐー　Xちょき　Cぱー");
-			DrawFormatString(x, y + 20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
-			DrawFormatString(x, y + 40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
+			printf_s("さんかい練習するよ　Zぐー　Xちょき　Cぱー\n");
+			printf_s("%d回目いってみよー\n", jcon_ + 1);
+			printf_s("じゃんけん\n");
+			//DrawFormatString(x, y, 0xFFFFFF, L"さんかい練習するよ　Zぐー　Xちょき　Cぱー");
+			//DrawFormatString(x, y + 20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
+			//DrawFormatString(x, y + 40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
 		}
 		else
 		{
-			DrawFormatString(x, y, 0xFFFFFF, L"Zぐー　Xちょき　Cぱー");
-			DrawFormatString(x, y + 20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
-			DrawFormatString(x, y + 40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
+			printf_s("Zぐー　Xちょき　Cぱー\n");
+			printf_s("%d回目いってみよー\n", jcon_ + 1);
+			printf_s("じゃんけん\n");
+			//DrawFormatString(x, y, 0xFFFFFF, L"Zぐー　Xちょき　Cぱー");
+			//DrawFormatString(x, y + 20, 0xFFFFFF, L"%d回目いってみよー", jcon_ + 1);
+			//DrawFormatString(x, y + 40, 0xFFFFFF, L"じゃんけん", jcon_ + 1);
 		}
 		break;
 	case JANK:
@@ -123,29 +139,35 @@ void JankenPon::Draw(void)
 	x += 200;
 	if (myflg_ == JANKENACTION::GU)
 	{
-		DrawFormatString(x, y, 0xFF0000, L"ボクは　グー");
+		lpImglMng.AddImg(L"Resource/image/fir.png", Vector2(800 / 2, 600 / 2));
+		//DrawFormatString(x, y, 0xFF0000, L"ボクは　グー");
 	}
 	else if (myflg_ == JANKENACTION::TYOKI)
 	{
-		DrawFormatString(x, y, 0xFF0000, L"ボクは　チョキ");
+		lpImglMng.AddImg(L"Resource/image/ref.png", Vector2(800 / 2, 600 / 2));
+		//DrawFormatString(x, y, 0xFF0000, L"ボクは　チョキ");
 	}
 	else if (myflg_ == JANKENACTION::PA)
 	{
-		DrawFormatString(x, y, 0xFF0000, L"ボクは　パー");
+		lpImglMng.AddImg(L"Resource/image/acu.png", Vector2(800 / 2, 600 / 2));
+		//DrawFormatString(x, y, 0xFF0000, L"ボクは　パー");
 	}
 
-	if (youact_ == JANKENACTION::GU)
-	{
-		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
-	}
-	else if (youact_ == JANKENACTION::TYOKI)
-	{
-		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
-	}
-	else if (youact_ == JANKENACTION::PA)
-	{
-		DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
-	}
+	//if (youact_ == JANKENACTION::GU)
+	//{
+	//	lpImglMng.AddImg(L"Resource/image/fir.png", Vector2(800 / 2, 600 / 2));
+	//	//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
+	//}
+	//else if (youact_ == JANKENACTION::TYOKI)
+	//{
+	//	lpImglMng.AddImg(L"Resource/image/ref.png", Vector2(800 / 2, 600 / 2));
+	//	//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
+	//}
+	//else if (youact_ == JANKENACTION::PA)
+	//{
+	//	lpImglMng.AddImg(L"Resource/image/acu.png", Vector2(800 / 2, 600 / 2));
+	//	//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
+	//}
 
 
 }

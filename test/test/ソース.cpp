@@ -12,6 +12,7 @@
 #include "mnj/ImgMnj.h"
 #include "Coins.h"
 #include "mnj/SoundMnj.h"
+#include "mnj/masterMnj.h"
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
@@ -43,6 +44,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 		return -1;
 	}
 
+	SetDrawScreen(DX_SCREEN_BACK);
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	// Effekseerを使用する場合は必ず設定する。
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
@@ -66,38 +68,45 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 	game_ = std::make_shared<Title>();
 	game_->Init();
 	oldgame_ = game_;
-
+	//SetBackgroundColor(255, 255, 255);
 	int transSE = LoadSoundMem(L"Resource/music/trans.mp3");
 	//ChangeVolumeSoundMem(100, transSE);
+	LpMastMng;
+
+	double deltime = GetNowCount();
+
 	while (ProcessMessage() != -1)
 	{
+		ScreenFlip();
+		ClsDrawScreen();
+
+		deltime += 16.66;
+		if (deltime > GetNowCount())
+			WaitTimer(static_cast<int>(deltime) - GetNowCount());
+
 		if (trans) {
 			transflame++;
 			if (transflame < maxtrans / 2) {
-				ClsDrawScreen();
+				LpMastMng.Run();
 				screen_->Draw();
-				lpImglMng.Draw();
-				lpImglMng.ResetD();
+				LpMastMng.Draw();
 				DrawFormatString(0, 50, 0xffffff, L"coins = %d枚", Coins::GetInstance().coins);
 				DrawFormatString(0, 70, 0xffffff, L"ticket = %d円分", Coins::GetInstance().kinken);
 				DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, transflame*4);
 				DrawBox(0, 0, 800, 600, GetColor(255, 255, 255), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-				ScreenFlip();
 			}
 			else if (transflame >= maxtrans / 2) {
-				ClsDrawScreen();
+				LpMastMng.Run();
 				game_->Draw();
-				lpImglMng.Draw();
-				lpImglMng.ResetD();
+				LpMastMng.Draw();
 				DrawFormatString(0, 50, 0xffffff, L"coins = %d枚", Coins::GetInstance().coins);
 				DrawFormatString(0, 70, 0xffffff, L"ticket = %d円分", Coins::GetInstance().kinken);
 				DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255-(transflame-maxtrans/2)*4);
 				DrawBox(0, 0, 800, 600, GetColor(255, 255, 255), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-				ScreenFlip();
 			}
 			if (transflame > maxtrans) {
 				trans = false;
@@ -105,8 +114,8 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 		}
 		else {
 			auto tmpGame = game_;
+			LpMastMng.Run();
 			game_->Run(game_);
-			ClsDrawScreen();
 			if (game_ != tmpGame) {
 				tmpGame->Draw();
 				PlaySoundMem(transSE,DX_PLAYTYPE_BACK);
@@ -114,11 +123,9 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			else {
 				game_->Draw();
 			}
-			lpImglMng.Draw();
-			lpImglMng.ResetD();
+			LpMastMng.Draw();
 			DrawFormatString(0, 50, 0xffffff, L"coins = %d枚", Coins::GetInstance().coins);
 			DrawFormatString(0, 70, 0xffffff, L"ticket = %d円分", Coins::GetInstance().kinken);
-			ScreenFlip();
 		}
 		if (oldgame_ != game_) {
 			trans = true;
@@ -126,6 +133,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			screen_ = oldgame_;
 		}
 		oldgame_ = game_;
+
 	}
 }
 

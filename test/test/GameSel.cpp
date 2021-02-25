@@ -26,6 +26,7 @@ void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 		baseGame->Init();
 	}
 	if (tmp != baseGame) {
+
 		StopSoundFile();
 		StopSoundMem(gameselbgm);
 	}
@@ -43,6 +44,9 @@ void GameSel::Init()
 	if (!CheckSoundFile()) {
 		gameselbgm = LoadSoundMem(L"Resource/music/title.mp3");
 	}
+
+	//lpSudlMng.AddBGM(L"Resource/music/title.mp3");
+
 	initflag = true;
 }
 

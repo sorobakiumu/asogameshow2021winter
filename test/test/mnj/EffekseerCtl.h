@@ -40,7 +40,7 @@ public:
 
 	int& GetEffect(std::string fname);
 	void SetEffect(std::string id, VECTOR pos);
-	void Drow(void);
+	void Draw(void);
 	void Updata(void);
 private:
 	EffekseerCtl();

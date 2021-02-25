@@ -37,17 +37,21 @@ public:
 
 	void ResetD(void);
 
-	void AddImg(std::wstring que, Vector2 pos, float angle = 0,bool flag = true);
+	void AddImg(std::wstring que, Vector2 pos, float angle = 0);
 
 
 	int GetGH(std::wstring que);
 
 	void Draw(void);
 
+	void SetDrawBoxIm();
+
 private:
 	static ImgMnj* sInstance;
-	std::vector < std::tuple<int, Vector2,float,bool> > drawListImg_;					//描画するものを溜めておくキュー（画像）
+	std::vector < std::pair<int, std::pair<Vector2,float>> > drawListImg_;					//描画するものを溜めておくキュー（画像）
 	std::map<std::wstring, int> imgHMap_;
+	bool setDrawBoxF_;
+	
 
 	ImgMnj();
 	~ImgMnj();

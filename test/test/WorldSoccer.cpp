@@ -4,6 +4,7 @@
 #include<random>
 #include"GameSel.h"
 #include "Coins.h"
+#include "mnj/ImgMnj.h"
 
 int soccerbgm;
 
@@ -38,6 +39,7 @@ void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 			else if (b->pos_.x + bollR > xoffset + 400) {
 				b->pos_.x = xoffset + 400 - bollR;
 			}
+			b->angle_++;
 		}
 		for (auto boll : bolls) {
 			if (boll->alive) {
@@ -75,37 +77,45 @@ void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 void WorldSoccer::Draw()
 {
 	//ゲームエリアの描画
-	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
+	//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 
-	DrawBox(hollmin_x, holl.y - hollR / 2, hollmax_x, holl.y + hollR / 2, 0xb8860b, true);
-	DrawBox(hollmin_x + bollR, holl.y - hollR / 2 + bollR, hollmax_x - bollR, holl.y + hollR / 2 - bollR, 0xffffff, true);
+	//DrawBox(hollmin_x, holl.y - hollR / 2, hollmax_x, holl.y + hollR / 2, 0xb8860b, true);
+	//DrawBox(hollmin_x + bollR, holl.y - hollR / 2 + bollR, hollmax_x - bollR, holl.y + hollR / 2 - bollR, 0xffffff, true);
 
+	lpImglMng.AddImg(L"Resource/image/tile2.png", Vector2(800/2, 600/2));
+	lpImglMng.AddImg(L"Resource/image/soccerGame!.png", Vector2(800/2, 600/2));
 	
 
 	//ボールの描画
 	for (auto b : bolls) {
 		if (b->alive) {
 			auto color = 0xff0000;
-			DrawCircle(b->pos_.x, b->pos_.y, bollR, color, true, true);
-			DrawCircle(b->pos_.x, b->pos_.y, bollR, 0x000000, false, true);
+			//DrawCircle(b->pos_.x, b->pos_.y, bollR, color, true, true);
+			//DrawCircle(b->pos_.x, b->pos_.y, bollR, 0x000000, false, true);
+			lpImglMng.AddImg(L"Resource/image/ball.png", Vector2(b->pos_.x, b->pos_.y),b->angle_);
 		}
 	}
 
 	//打ちだし場所の描画(デバッグ用)
-	DrawCircle(downpt, 20, 20, 0x000000, false, true);
+#ifdef _DEBUG
+	//DrawCircle(downpt, 20, 20, 0x000000, false, true);
+	lpImglMng.AddImg(L"Resource/image/ball.png", Vector2(downpt, 20));
 
+#endif
 
 
 	//ピンの描画
-	for (auto p : pinPositions) {
-		DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
-	}
-	DrawCircle(holl.x, holl.y, hollR, 0x000000, true, true);
+	//for (auto p : pinPositions) {
+	//	DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
+	//}
+	//DrawCircle(holl.x, holl.y, hollR, 0x000000, true, true);
+	lpImglMng.AddImg(L"Resource/image/ga.png", Vector2(holl.x, holl.y));
 
 	if (!gamestart) {
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
-		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		lpImglMng.SetDrawBoxIm();
+		//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+		//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
+		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
 	DrawFormatString(0, 0, 0xffffff, L"スコア　%d", score);
@@ -116,7 +126,7 @@ void WorldSoccer::Init()
 {
 	PinInit();
 	holl.x = 400;
-	holl.y = 500;
+	holl.y = 490;
 	initflag = true;
 	soccerbgm = LoadSoundMem(L"Resource/music/soccer.mp3");
 }
