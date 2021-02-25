@@ -76,8 +76,9 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 
 void CarRace::Draw()
 {
+
 	//ゲームエリアの描画
-	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
+	//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 
 	//打ちだし場所の描画(デバッグ用)
 	DrawCircle(downpt, 20, 20, 0x000000, false, true);
