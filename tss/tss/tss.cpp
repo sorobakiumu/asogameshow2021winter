@@ -18,3 +18,49 @@
 //   4. エラー一覧ウィンドウを使用してエラーを表示します
 //   5. [プロジェクト] > [新しい項目の追加] と移動して新しいコード ファイルを作成するか、[プロジェクト] > [既存の項目の追加] と移動して既存のコード ファイルをプロジェクトに追加します
 //   6. 後ほどこのプロジェクトを再び開く場合、[ファイル] > [開く] > [プロジェクト] と移動して .sln ファイルを選択します
+#include <stdio.h>
+#include <math.h>
+#include <iostream>
+#include <fstream>
+#include <DxLib.h>
+
+int main(void)
+{
+	int i, j, k;
+	printf("1:[2]\n ");
+	int c = 0;
+	c++; 
+	const char* fileName = "log.txt";
+
+	std::ofstream ofs(fileName);
+	ofs << "1: [2]" ;
+	ofs << std::endl;
+
+	for (i = 3; ProcessMessage()==0; i += 2)
+	{
+		k = 0;
+		for (j = 3; j <= sqrt(i); j += 2)
+		{
+			if (i % j == 0)
+			{
+				k = 1;
+				break;
+			}
+		}
+
+		if (k == 0)
+			c++; \
+			printf("%d:[%d] \n", c, i); \
+			ofs << c;\
+			ofs << ":[";\
+			ofs << i;\
+			ofs << "]";\
+			ofs << std::endl;
+
+	}
+	ofs.close();
+	printf("\n");
+
+	return 0;
+}
+
