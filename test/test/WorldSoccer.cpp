@@ -82,8 +82,8 @@ void WorldSoccer::Draw()
 	//DrawBox(hollmin_x, holl.y - hollR / 2, hollmax_x, holl.y + hollR / 2, 0xb8860b, true);
 	//DrawBox(hollmin_x + bollR, holl.y - hollR / 2 + bollR, hollmax_x - bollR, holl.y + hollR / 2 - bollR, 0xffffff, true);
 
-	lpImglMng.AddImg(L"Resource/image/tile2.png", Vector2(800/2, 600/2));
-	lpImglMng.AddImg(L"Resource/image/soccerGame!.png", Vector2(800/2, 600/2));
+	lpImglMng.AddImg(L"Resource\\image/tile2.png", Vector2(800/2, 600/2));
+	lpImglMng.AddImg(L"Resource\\image/soccerGame!.png", Vector2(800/2, 600/2));
 	
 
 	//ボールの描画
@@ -92,14 +92,14 @@ void WorldSoccer::Draw()
 			auto color = 0xff0000;
 			//DrawCircle(b->pos_.x, b->pos_.y, bollR, color, true, true);
 			//DrawCircle(b->pos_.x, b->pos_.y, bollR, 0x000000, false, true);
-			lpImglMng.AddImg(L"Resource/image/ball.png", Vector2(b->pos_.x, b->pos_.y),b->angle_);
+			lpImglMng.AddImg(L"Resource\\image/ball.png", Vector2(b->pos_.x, b->pos_.y),b->angle_);
 		}
 	}
 
 	//打ちだし場所の描画(デバッグ用)
 #ifdef _DEBUG
 	//DrawCircle(downpt, 20, 20, 0x000000, false, true);
-	lpImglMng.AddImg(L"Resource/image/ball.png", Vector2(downpt, 20));
+	lpImglMng.AddImg(L"Resource\\image/ball.png", Vector2(downpt, 20));
 
 #endif
 
@@ -109,7 +109,7 @@ void WorldSoccer::Draw()
 	//	DrawCircle(p.x, p.y, pinsize, 0x000000, true, true);
 	//}
 	//DrawCircle(holl.x, holl.y, hollR, 0x000000, true, true);
-	lpImglMng.AddImg(L"Resource/image/ga.png", Vector2(holl.x, holl.y));
+	lpImglMng.AddImg(L"Resource\\image/ga.png", Vector2(holl.x, holl.y));
 
 	if (!gamestart) {
 		lpImglMng.SetDrawBoxIm();
@@ -128,7 +128,7 @@ void WorldSoccer::Init()
 	holl.x = 400;
 	holl.y = 490;
 	initflag = true;
-	soccerbgm = LoadSoundMem(L"Resource/music/soccer.mp3");
+	soccerbgm = LoadSoundMem(L"Resource\\music/soccer.mp3");
 }
 
 void WorldSoccer::PinInit()

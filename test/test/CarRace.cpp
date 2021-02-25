@@ -79,13 +79,13 @@ void CarRace::Draw()
 
 	//ÉQÅ[ÉÄÉGÉäÉAÇÃï`âÊ
 	//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
-	lpImglMng.AddImg(L"Resource/image/tile.png", Vector2(800 / 2, 600 / 2));
-	lpImglMng.AddImg(L"Resource/image/CarRace.png", Vector2(800 / 2, 600 / 2-5));
+	lpImglMng.AddImg(L"Resource\\image/tile.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource\\image/CarRace.png", Vector2(800 / 2, 600 / 2-5));
 
 	//ë≈ÇøÇæÇµèÍèäÇÃï`âÊ(ÉfÉoÉbÉOóp)
 #ifdef _DEBUG
 	//DrawCircle(downpt, 20, 20, 0x000000, false, true);
-	lpImglMng.AddImg(L"Resource/image/ball.png", Vector2(downpt, 20));
+	lpImglMng.AddImg(L"Resource\\image/ball.png", Vector2(downpt, 20));
 #endif
 
 	////ç‚ÇÃï`âÊ
@@ -96,7 +96,7 @@ void CarRace::Draw()
 	//åäÇÃï`âÊ
 	for (auto p : hollPosition) {
 		//DrawCircle(p.x, p.y, hollR, 0x000000, true, true);
-		lpImglMng.AddImg(L"Resource/image/hol.png", Vector2(p.x, p.y));
+		lpImglMng.AddImg(L"Resource\\image/hol.png", Vector2(p.x, p.y));
 
 
 	}
@@ -107,7 +107,7 @@ void CarRace::Draw()
 	//É{Å[ÉãÇÃï`âÊ
 	for (auto boll : bolls) {
 		BollRadian(boll);
-		lpImglMng.AddImg(L"Resource/image/coins.png", boll->pos_, boll->angle_);
+		lpImglMng.AddImg(L"Resource\\image/coins.png", boll->pos_, boll->angle_);
 	}
 
 	//DrawFormatString(0, 0, 0xFFFFFF, L"ÇœÇÌÅ[ %3.3f ál ", powP);
@@ -144,7 +144,7 @@ void CarRace::Init()
 		{{xoffset + 50 + hollR * 2,550} ,{xoffset + 50 + hollR * 2,600}}
 	};
 
-	racebgm = LoadSoundMem(L"Resource/music/car.mp3");
+	racebgm = LoadSoundMem(L"Resource\\music/car.mp3");
 	initflag = true;
 }
 

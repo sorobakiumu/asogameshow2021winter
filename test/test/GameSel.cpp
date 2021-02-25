@@ -42,7 +42,7 @@ void GameSel::Draw()
 void GameSel::Init()
 {
 	if (!CheckSoundFile()) {
-		gameselbgm = LoadSoundMem(L"Resource/music/title.mp3");
+		gameselbgm = LoadSoundMem(L"Resource\\music/title.mp3");
 	}
 
 	//lpSudlMng.AddBGM(L"Resource/music/title.mp3");

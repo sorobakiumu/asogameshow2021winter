@@ -75,11 +75,11 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 void JankenPon::Draw(void)
 {
 
-	lpImglMng.AddImg(L"Resource/image/tile3.png", Vector2(800 / 2, 600 / 2));
-	lpImglMng.AddImg(L"Resource/image/jan.png", Vector2(800 / 2, 600 / 2));
-	lpImglMng.AddImg(L"Resource/image/ruru.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource\\image/tile3.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource\\image/jan.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource\\image/ruru.png", Vector2(800 / 2, 600 / 2));
 	if (res_ == 0)
-		lpImglMng.AddImg(L"Resource/image/rubac.png", Vector2(800 / 2, 600 / 2));
+		lpImglMng.AddImg(L"Resource\\image/rubac.png", Vector2(800 / 2, 600 / 2));
 	int x = 50, y = 50;
 	switch (nowmode_)
 	{
@@ -141,33 +141,33 @@ void JankenPon::Draw(void)
 	x += 200;
 	if (myflg_ == JANKENACTION::GU)
 	{
-		lpImglMng.AddImg(L"Resource/image/fir.png", Vector2(800 / 2, 600 / 2));
+		lpImglMng.AddImg(L"Resource\\image/fir.png", Vector2(800 / 2, 600 / 2));
 		//DrawFormatString(x, y, 0xFF0000, L"ボクは　グー");
 	}
 	else if (myflg_ == JANKENACTION::TYOKI)
 	{
-		lpImglMng.AddImg(L"Resource/image/ref.png", Vector2(800 / 2, 600 / 2));
+		lpImglMng.AddImg(L"Resource\\image/ref.png", Vector2(800 / 2, 600 / 2));
 		//DrawFormatString(x, y, 0xFF0000, L"ボクは　チョキ");
 	}
 	else if (myflg_ == JANKENACTION::PA)
 	{
-		lpImglMng.AddImg(L"Resource/image/acu.png", Vector2(800 / 2, 600 / 2));
+		lpImglMng.AddImg(L"Resource\\image/acu.png", Vector2(800 / 2, 600 / 2));
 		//DrawFormatString(x, y, 0xFF0000, L"ボクは　パー");
 	}
 
 	if (youact_ == JANKENACTION::GU)
 	{
-		lpImglMng.AddImg(L"Resource/image/fir.png", Vector2(800 / 2, 500));
+		lpImglMng.AddImg(L"Resource\\image/fir.png", Vector2(800 / 2, 500));
 		//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
 	}
 	else if (youact_ == JANKENACTION::TYOKI)
 	{
-		lpImglMng.AddImg(L"Resource/image/ref.png", Vector2(800 / 2, 500));
+		lpImglMng.AddImg(L"Resource\\image/ref.png", Vector2(800 / 2, 500));
 		//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
 	}
 	else if (youact_ == JANKENACTION::PA)
 	{
-		lpImglMng.AddImg(L"Resource/image/acu.png", Vector2(800 / 2, 500));
+		lpImglMng.AddImg(L"Resource\\image/acu.png", Vector2(800 / 2, 500));
 		//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
 	}
 
@@ -229,7 +229,7 @@ void JankenPon::Init(void)
 		tfile.close();
 	}
 	initflag = true;
-	LoadSoundMem(L"Resource/music/gcp.mp3");
+	LoadSoundMem(L"Resource\\music/gcp.mp3");
 }
 
 void JankenPon::SetAct(void)

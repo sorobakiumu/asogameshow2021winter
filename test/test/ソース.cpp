@@ -43,7 +43,6 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 		DxLib_End();
 		return -1;
 	}
-
 	SetDrawScreen(DX_SCREEN_BACK);
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	// Effekseerを使用する場合は必ず設定する。
@@ -69,7 +68,9 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 	game_->Init();
 	oldgame_ = game_;
 	//SetBackgroundColor(255, 255, 255);
-	int transSE = LoadSoundMem(L"Resource/music/trans.mp3");
+
+	SetDXArchiveKeyString(L"86agemeronpan");
+	int transSE = LoadSoundMem(L"Resource\\music/trans.mp3");
 	//ChangeVolumeSoundMem(100, transSE);
 	LpMastMng;
 
