@@ -46,6 +46,22 @@ enum GameFlag
 	WINCPU_GF
 };
 
+enum class OUTPUTDAT
+{
+	GOLD = 1,
+	Three1P,
+	Seven1P,
+	One1P,
+	Five1P,
+	Two1P,
+	ElevenP,
+	Three2P,
+	Seven2P,
+	One2P,
+	Five2P,
+	Two2P,
+};
+
 class JankenPon :
 	public BaseGame
 {
