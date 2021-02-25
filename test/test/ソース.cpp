@@ -23,7 +23,7 @@ namespace {
 	const int maxtrans = 128;
 }
 
-int main()
+int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int) 
 {
 	DxLib::ChangeWindowMode(true);
 	DxLib::SetGraphMode(800, 600, 0, 0);
