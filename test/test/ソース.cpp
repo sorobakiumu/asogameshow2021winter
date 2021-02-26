@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 	oldgame_ = game_;
 	//SetBackgroundColor(255, 255, 255);
 
-	SetDXArchiveKeyString(L"86agemeronpan");
+	SetDXArchiveKeyString(L"36agemeronpan");
 	int transSE = LoadSoundMem(L"Resource\\music/trans.mp3");
 	//ChangeVolumeSoundMem(100, transSE);
 	LpMastMng;
