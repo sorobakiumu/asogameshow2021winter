@@ -83,6 +83,7 @@ void WorldSoccer::Draw()
 	//DrawBox(hollmin_x + bollR, holl.y - hollR / 2 + bollR, hollmax_x - bollR, holl.y + hollR / 2 - bollR, 0xffffff, true);
 
 	lpImglMng.AddImg(L"Resource\\image/tile2.png", Vector2(800/2, 600/2));
+	lpImglMng.AddImg(L"Resource\\image/setumei3.png", Vector2(800 / 2 + 300, 600 / 2));
 	lpImglMng.AddImg(L"Resource\\image/soccerGame!.png", Vector2(800/2, 600/2));
 	
 

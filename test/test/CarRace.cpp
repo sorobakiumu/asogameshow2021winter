@@ -80,6 +80,7 @@ void CarRace::Draw()
 	//ゲームエリアの描画
 	//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, 0xffffff, true);
 	lpImglMng.AddImg(L"Resource\\image/tile.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource\\image/setumei.png", Vector2(800 / 2 + 300, 600 / 2));
 	lpImglMng.AddImg(L"Resource\\image/CarRace.png", Vector2(800 / 2, 600 / 2-5));
 
 	//打ちだし場所の描画(デバッグ用)

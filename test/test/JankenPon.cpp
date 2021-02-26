@@ -76,6 +76,7 @@ void JankenPon::Draw(void)
 {
 
 	lpImglMng.AddImg(L"Resource\\image/tile3.png", Vector2(800 / 2, 600 / 2));
+	lpImglMng.AddImg(L"Resource\\image/setumei2.png", Vector2(800 / 2+300, 600 / 2));
 	lpImglMng.AddImg(L"Resource\\image/jan.png", Vector2(800 / 2, 600 / 2));
 	lpImglMng.AddImg(L"Resource\\image/ruru.png", Vector2(800 / 2, 600 / 2));
 	if (res_ == 0)
@@ -355,6 +356,22 @@ void JankenPon::ResultMove(void)
 			if (gameflag_ == GameFlag::WINYOU_GF)
 			{
 				auto dat = static_cast<OUTPUTDAT>(res_);
+				if (dat == OUTPUTDAT::GOLD)
+				{
+					if (rand() % 100 != 0)
+					{
+						res_ = 2;
+						dat = OUTPUTDAT::Three1P;
+					}
+				}
+				if (dat == OUTPUTDAT::ElevenP)
+				{
+					if (rand() % 50 != 0)
+					{
+						res_ = 8;
+						dat = OUTPUTDAT::Three2P;
+					}
+				}
 				switch (dat)
 				{
 				case OUTPUTDAT::GOLD:
