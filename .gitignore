@@ -29,4 +29,8 @@
 /tss/tss/LICENSE
 /tss/tss/Log.txt
 /test/.vs/test/v16
-
+/test/Debug
+/test/x64
+/test/test/Log.txt
+/test/test/x64
+/test/test/Debug
