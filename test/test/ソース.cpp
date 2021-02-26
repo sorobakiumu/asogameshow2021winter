@@ -123,6 +123,10 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 		else {
 			auto tmpGame = game_;
 			LpMastMng.Run();
+			if (LpMastMng.resultF_)
+			{
+				reseF = true;
+			}
 			game_->Run(game_);
 
 

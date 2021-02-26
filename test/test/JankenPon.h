@@ -87,7 +87,6 @@ public:
 	void Init(void) override;
 private:
 
-
 	/// <summary>
 	/// どの手を出すか考え（数が多いのを探す）て選ぶ　10かいにいっかいランダム！運あり！
 	/// </summary>
@@ -143,5 +142,17 @@ private:
 	int initflag;
 	int gcpsound;
 	int tcon_;
+
+	int pMoney_;	//1　pr 3 or 5
+	bool SetFlg_;
+	
+	bool af_;
+	bool aof_;
+	bool sf_;
+	bool sof_;
+	bool df_;
+	bool dof_;
+
+	bool gameEndF_;
 };
 

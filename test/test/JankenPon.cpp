@@ -44,6 +44,22 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 		PlaySoundMem(gcpsound,DX_PLAYTYPE_LOOP);
 		initflag = false;
 	}
+	aof_ = af_;
+	sof_ = sf_;
+	dof_ = df_;
+	if (CheckHitKey(KEY_INPUT_A))
+		af_ = true;
+	else
+		af_ = false;
+	if (CheckHitKey(KEY_INPUT_S))
+		sf_ = true;
+	else
+		sf_ = false;
+	if (CheckHitKey(KEY_INPUT_D))
+		df_ = true;
+	else
+		df_ = false;
+
 	switch (nowmode_)
 	{
 	case STAY:
@@ -65,7 +81,8 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 	default:
 		break;
 	}
-	if (CheckHitKey(KEY_INPUT_5)) {
+	if (CheckHitKey(KEY_INPUT_5) || gameEndF_)
+	{
 		baseGame = std::make_shared<Result>();
 		baseGame->Init();
 		StopSoundMem(gcpsound);
@@ -86,6 +103,14 @@ void JankenPon::Draw(void)
 	switch (nowmode_)
 	{
 	case STAY:
+		if (SetFlg_)
+		{
+			lpImglMng.AddImg(L"Resource\\image/hoc.png", Vector2(800 / 2, 600 / 2));
+		}
+		else
+		{
+			lpImglMng.AddImg(L"Resource\\image/woc.png", Vector2(800 / 2, 600 / 2));
+		}
 		if (jcon_ < 3)
 		{
 			printf_s("さんかい練習するよ　Zぐー　Xちょき　Cぱー\n");
@@ -108,11 +133,14 @@ void JankenPon::Draw(void)
 	case JANK:
 		DrawFormatString(x, y, 0xFFFFFF, L"ぽん！");
 		if (gameflag_ == GameFlag::DRAW_GF)
-			DrawFormatString(x, y + 20, 0xFFFFFF, L"ひきわけだね！");
+			//DrawFormatString(x, y + 20, 0xFFFFFF, L"ひきわけだね！");
+			lpImglMng.AddImg(L"Resource\\image/sute.png", Vector2(800 / 2, 600 / 2));
 		if (gameflag_ == GameFlag::WINCPU_GF)
-			DrawFormatString(x, y + 20, 0xFF0000, L"ボクのかちだね！");
+			//DrawFormatString(x, y + 20, 0xFF0000, L"ボクのかちだね！");
+			lpImglMng.AddImg(L"Resource\\image/low.png", Vector2(800 / 2, 600 / 2));
 		if (gameflag_ == GameFlag::WINYOU_GF)
-			DrawFormatString(x, y + 20, 0x0000FF, L"キミのかちだね！");
+			//DrawFormatString(x, y + 20, 0x0000FF, L"キミのかちだね！");
+			lpImglMng.AddImg(L"Resource\\image/win.png", Vector2(800 / 2, 600 / 2));
 		break;
 	case RESER:
 		if (!resconF_)
@@ -163,21 +191,21 @@ void JankenPon::Draw(void)
 		//DrawFormatString(x, y, 0xFF0000, L"ボクは　パー");
 	}
 
-	if (youact_ == JANKENACTION::GU)
-	{
-		lpImglMng.AddImg(L"Resource\\image/fir.png", Vector2(800 / 2, 500));
-		//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
-	}
-	else if (youact_ == JANKENACTION::TYOKI)
-	{
-		lpImglMng.AddImg(L"Resource\\image/ref.png", Vector2(800 / 2, 500));
-		//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
-	}
-	else if (youact_ == JANKENACTION::PA)
-	{
-		lpImglMng.AddImg(L"Resource\\image/acu.png", Vector2(800 / 2, 500));
-		//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
-	}
+	//if (youact_ == JANKENACTION::GU)
+	//{
+	//	lpImglMng.AddImg(L"Resource\\image/fir.png", Vector2(800 / 2, 500));
+	//	//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　グー");
+	//}
+	//else if (youact_ == JANKENACTION::TYOKI)
+	//{
+	//	lpImglMng.AddImg(L"Resource\\image/ref.png", Vector2(800 / 2, 500));
+	//	//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　チョキ");
+	//}
+	//else if (youact_ == JANKENACTION::PA)
+	//{
+	//	lpImglMng.AddImg(L"Resource\\image/acu.png", Vector2(800 / 2, 500));
+	//	//DrawFormatString(x + 20, y + 20, 0x0000FF, L"キミは　パー");
+	//}
 
 
 }
@@ -185,7 +213,9 @@ void JankenPon::Draw(void)
 void JankenPon::Init(void)
 {
 	std::ifstream tfile("data/jank.gdf");
-
+	pMoney_ = 1;
+	SetFlg_ = true;
+	gameEndF_ = false;
 	gameflag_ = GameFlag::no_Gf;
 	nowmode_ = NOWMODE::STAY;
 	youact_ = JANKENACTION::NO;
@@ -198,6 +228,12 @@ void JankenPon::Init(void)
 	otout_ = 0;
 	gconf_ = false;
 	gcon_ = 0;
+	af_ = false;
+	aof_ = false;
+	sf_ = false;
+	sof_ = false;
+	df_ = false;
+	dof_ = false;
 	if (!tfile)
 	{
 		for (int x = 0; x < JankenMove; x++)
@@ -267,23 +303,58 @@ void JankenPon::SetAct(void)
 
 void JankenPon::StayMove(void)
 {
-	if (CheckHitKey(KEY_INPUT_Z))
+	if (!SetFlg_)
 	{
-		youact_ = JANKENACTION::GU;
+		if (!aof_ && af_)
+		{
+			youact_ = JANKENACTION::GU;
+		}
+		if (!sof_ && sf_)
+		{
+			youact_ = JANKENACTION::PA;
+		}
+		if (!dof_ && df_)
+		{
+			youact_ = JANKENACTION::TYOKI;
+		}
+		if (youact_ != JANKENACTION::NO)
+		{
+			Coins::GetInstance().coins -= pMoney_;
+			gconf_ = true;
+			nowmode_ = NOWMODE::JANK;
+		}
 	}
-	if (CheckHitKey(KEY_INPUT_X))
+	else
 	{
-		youact_ = JANKENACTION::TYOKI;
-	}
-	if (CheckHitKey(KEY_INPUT_C))
-	{
-		youact_ = JANKENACTION::PA;
-	}
-	if (youact_ != JANKENACTION::NO)
-	{
-		Coins::GetInstance().coins--;
-		gconf_ = true;
-		nowmode_ = NOWMODE::JANK;
+		if (!aof_ && af_)
+		{
+			if (Coins::GetInstance().coins >= 1)
+			{
+				youact_ = JANKENACTION::GU;
+				pMoney_ = 1;
+			}
+		}
+		if (!sof_ && sf_)
+		{
+			if (Coins::GetInstance().coins >= 3)
+			{
+				youact_ = JANKENACTION::PA;
+				pMoney_ = 3;
+			}
+		}
+		if (!dof_ && df_)
+		{
+			if (Coins::GetInstance().coins >= 5)
+			{
+				youact_ = JANKENACTION::TYOKI;
+				pMoney_ = 5;
+			}
+		}
+		if (youact_ != JANKENACTION::NO)
+		{
+			SetFlg_ = false;
+			youact_ = JANKENACTION::NO;
+		}
 	}
 }
 
@@ -293,6 +364,11 @@ void JankenPon::Finmove(void)
 	myflg_ = JANKENACTION::NO;
 
 	//if (CheckHitKey(KEY_INPUT_SPACE))
+
+	if (Coins::GetInstance().coins <= 0)
+	{
+		gameEndF_ = true;
+	}
 	{
 		resconNum_ = 0;
 		resconF_ = false;
@@ -386,42 +462,44 @@ void JankenPon::ResultMove(void)
 					Coins::GetInstance().kinken++;
 					break;
 				case OUTPUTDAT::Three1P:
-					Coins::GetInstance().coins += 3;
+					Coins::GetInstance().coins += pMoney_ * 3;
 					break;
 				case OUTPUTDAT::Seven1P:
-					Coins::GetInstance().coins += 7;
+					Coins::GetInstance().coins += pMoney_ * 7;
 					break;
 				case OUTPUTDAT::One1P:
-					Coins::GetInstance().coins += 1;
+					Coins::GetInstance().coins += pMoney_ * 1;
 					break;
 				case OUTPUTDAT::Five1P:
-					Coins::GetInstance().coins += 5;
+					Coins::GetInstance().coins += pMoney_ * 5;
 					break;
 				case OUTPUTDAT::Two1P:
-					Coins::GetInstance().coins += 2;
+					Coins::GetInstance().coins += pMoney_ * 2;
 					break;
 				case OUTPUTDAT::ElevenP:
-					Coins::GetInstance().coins += 11;
+					Coins::GetInstance().coins += pMoney_ * 11;
 					break;
 				case OUTPUTDAT::Three2P:
-					Coins::GetInstance().coins += 3;
+					Coins::GetInstance().coins += pMoney_ * 3;
 					break;
 				case OUTPUTDAT::Seven2P:
-					Coins::GetInstance().coins += 7;
+					Coins::GetInstance().coins += pMoney_ * 7;
 					break;
 				case OUTPUTDAT::One2P:
-					Coins::GetInstance().coins += 1;
+					Coins::GetInstance().coins += pMoney_ * 1;
 					break;
 				case OUTPUTDAT::Five2P:
-					Coins::GetInstance().coins += 5;
+					Coins::GetInstance().coins += pMoney_ * 5;
 					break;
 				case OUTPUTDAT::Two2P:
-					Coins::GetInstance().coins += 2;
+					Coins::GetInstance().coins += pMoney_ * 2;
 					break;
 				default:
 					break;
 				}
 			}
+			if (Coins::GetInstance().coins < pMoney_)
+				SetFlg_ = true;
 			nowmode_ = NOWMODE::FIN;
 			gcon_ = 0;
 			return;
@@ -478,3 +556,4 @@ void JankenPon::WinCheck(void)
 		}
 	}
 }
+

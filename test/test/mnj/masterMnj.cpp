@@ -23,6 +23,7 @@ masterMnj::masterMnj()
 	lpSudlMng.ResetD();
 	lpImglMng.ResetD();
 	lpEfclMng;
+	resultF_ = false;
 }
 
 masterMnj::~masterMnj()

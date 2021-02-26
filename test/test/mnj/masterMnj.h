@@ -33,6 +33,7 @@ public:
 	}
 	void Run(void);
 	void Draw(void);
+	bool resultF_;
 private:
 	static masterMnj* sInstance;
 
