@@ -25,6 +25,7 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 	//ˆÚ“®“ü—Íî•ñ
 	key = CheckHitKey(KEY_INPUT_SPACE);
 	if (!balF)
+	{
 		if ((key == true) && (oldkey == true)) {
 			Coins::GetInstance().coins--;
 			if (Coins::GetInstance().coins < 0) {
@@ -34,6 +35,8 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 			bolls.emplace_back(new Boll({ downpt,1.0f }));
 			balF = true;
 		}
+	}
+
 	oldkey = key;
 
 	//“–‚½‚è”»’è
@@ -155,6 +158,7 @@ void CarRace::Init()
 	racebgm = LoadSoundMem(L"Resource\\music/car.mp3");
 	initflag = true;
 	tcon_++;
+	powP = 0;
 }
 
 void CarRace::IsHit(std::shared_ptr<Boll>& boll, bool& balF)
