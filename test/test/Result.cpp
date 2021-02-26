@@ -46,10 +46,10 @@ void Result::Init()
 	}
 
 	flame = 0;
-	okasiList_[0] = L"スカイクッキー";
-	okasiList_[1] = L"コーンソード";
-	okasiList_[2] = L"うまか棒";
-	okasiList_[3] = L"トロルチョコ";
+	//okasiList_[0] = L"スカイクッキー";
+	//okasiList_[1] = L"コーンソード";
+	//okasiList_[2] = L"うまか棒";
+	//okasiList_[3] = L"トロルチョコ";
 
 }
 

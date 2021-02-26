@@ -22,5 +22,5 @@ void Title::Draw()
 
 void Title::Init()
 {
-	PlaySoundFile(L"Resource\\music/title.mp3", DX_PLAYTYPE_LOOP);
+//	PlaySoundFile(L"Resource\\music/title.mp3", DX_PLAYTYPE_LOOP);
 }
