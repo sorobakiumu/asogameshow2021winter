@@ -34,11 +34,11 @@ void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 			baseGame = std::make_shared<WorldSoccer>();
 			baseGame->Init();
 		}
-		if (nowMowsGame_ == thisGameis::NOSELGAME)
-		{
-			baseGame = std::make_shared<Result>();
-			baseGame->Init();
-		}
+		//if (nowMowsGame_ == thisGameis::NOSELGAME)
+		//{
+		//	baseGame = std::make_shared<Result>();
+		//	baseGame->Init();
+		//}
 
 		//if (CheckHitKey(KEY_INPUT_1)) {
 		//	baseGame = std::make_shared<WorldSoccer>();
@@ -81,7 +81,6 @@ void GameSel::Draw()
 		if (nowMowsGame_ == thisGameis::SoccerGame)
 			lpImglMng.AddImg(L"Resource\\image/minset3.png", tmpPos);
 	}
-	lpImglMng.AddImg(L"Resource\\image/car.png", Vector2(mousePos_.x + 16, mousePos_.y + 16));
 
 	//lpImglMng.AddImg(L"Resource\\image/b.png", Vector2(70,138));
 	//lpImglMng.AddImg(L"Resource\\image/b.png", Vector2(240,439));

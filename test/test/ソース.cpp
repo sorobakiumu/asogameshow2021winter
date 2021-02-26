@@ -13,6 +13,8 @@
 #include "Coins.h"
 #include "mnj/SoundMnj.h"
 #include "mnj/masterMnj.h"
+#include "mnj/ImgMnj.h"
+#include "Result.h"
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
@@ -74,9 +76,14 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 	//ChangeVolumeSoundMem(100, transSE);
 	LpMastMng;
 
+	bool resbotom = false;
 	double deltime = GetNowCount();
-
-	while (ProcessMessage() != -1)
+	bool onforMouseLefOld =false , onforMouseLef = false;
+	bool reseF = false;
+	bool finF = false;
+	int gFcon = 0; 
+	int px = 0, py = 0;
+	while (ProcessMessage() != -1 && !finF)
 	{
 		ScreenFlip();
 		ClsDrawScreen();
@@ -117,12 +124,77 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			auto tmpGame = game_;
 			LpMastMng.Run();
 			game_->Run(game_);
+
+
+			int tx, ty;
+
+			DxLib::GetMousePoint(&tx, &ty);
+			if (tx < 800)
+				if (tx > 0)
+					if (ty > 0)
+						if (ty < 600)
+						{
+							px = tx;
+							py = ty;
+						} 
+			{
+			
+				onforMouseLefOld = onforMouseLef;
+				int Mouse = GetMouseInput();
+				if (Mouse & MOUSE_INPUT_LEFT)
+				{
+					onforMouseLef = true;
+				}
+				else
+				{
+					onforMouseLef = false;
+				}
+				if (gFcon != 0)
+				{
+					if (px >= 800 - 64 && px <= 800 && py >= 0 && py <= 64)
+					{
+
+
+						if (onforMouseLefOld && !onforMouseLef)
+						{
+							resbotom = true;
+						}
+						if (resbotom)
+						{
+							if (!reseF)
+							{
+								resbotom = false;
+								reseF = true;
+								auto baseGame = std::make_shared<Result>();
+								baseGame->Init();
+								game_ = baseGame;
+								StopSoundFile();
+								StopSound();
+							}
+							else
+							{
+								finF = true;
+							}
+						}
+					}
+				}
+			}
+
 			if (game_ != tmpGame) {
 				tmpGame->Draw();
 				PlaySoundMem(transSE,DX_PLAYTYPE_BACK);
 			}
 			else {
 				game_->Draw();
+			}
+			if (gFcon != 0)
+			{
+				if (!reseF)
+					lpImglMng.AddImg(L"Resource\\image/koukan.png", Vector2(800 - 32, 32));
+				else
+					lpImglMng.AddImg(L"Resource\\image/bat.png", Vector2(800 - 32, 32));
+
+				lpImglMng.AddImg(L"Resource\\image/car.png", Vector2(px + 16, py + 16));
 			}
 			LpMastMng.Draw();
 			DrawFormatString(0, 50, 0xffffff, L"coins = %d–‡", Coins::GetInstance().coins);
@@ -132,10 +204,15 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			trans = true;
 			transflame = 0;
 			screen_ = oldgame_;
+			if (gFcon == 0)
+				gFcon++;
 		}
 		oldgame_ = game_;
-
+		if (gFcon != 0)
+			gFcon++;
 	}
+	DxLib_End();
+	return 0;
 }
 
 
