@@ -12,6 +12,13 @@ void Result::Run(std::shared_ptr<BaseGame>& baseGame)
 		baseGame->Init();
 	}
 	flame++;
+	if (flame == 10) {
+		PlaySoundMem(drum,DX_PLAYTYPE_BACK);
+	}
+	if (flame == 240) {
+		StopSoundMem(drum);
+		PlaySoundMem(jan, DX_PLAYTYPE_BACK);
+	}
 }
 
 void Result::Draw()
@@ -49,13 +56,13 @@ void Result::Draw()
 		numberDraw(okasi[3], Vector2(500, 290));
 		DrawGraph(500, 290, graph[7], true);
 	}
-	if (flame > 180&&flame<300) {
+	if (flame > 180&&flame<240) {
 		//DrawFormatString(200, 200, 0xffffff, L"合計 %000d円分買いました", rand() % 1000);
 		DrawGraph(200, 400, graph[5], true);
 		numberDraw(rand() % 1000, Vector2(400, 400));
 		DrawGraph(400, 400, graph[6], true);
 	}
-	if (flame >= 300) {
+	if (flame >= 240) {
 		//DrawFormatString(200, 200, 0xffffff, L"合計 %000d円分買いました", sum);
 		DrawGraph(200, 400, graph[5], true);
 		numberDraw(sum, Vector2(400, 400));
@@ -110,6 +117,13 @@ void Result::Init()
 	graph[6] = LoadGraph(L"Resource/image/円分買いました.png");
 	graph[7] = LoadGraph(L"Resource/image/個.png");
 
+	okasiGraph[0] = LoadGraph(L"Resource/image/pk1.png");
+	okasiGraph[1] = LoadGraph(L"Resource/image/pk2.png");
+	okasiGraph[2] = LoadGraph(L"Resource/image/pk3.png");
+	okasiGraph[3] = LoadGraph(L"Resource/image/pk4.png");
+
+	drum = LoadSoundMem(L"Resource/music/ドラムロール.mp3");
+	jan = LoadSoundMem(L"Resource/music/ジャン！.mp3");
 }
 
 int Result::value(int& okasivalue, int& val)

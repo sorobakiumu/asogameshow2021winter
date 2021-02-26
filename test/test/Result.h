@@ -25,5 +25,8 @@ private:
 	void numberDraw(int num, Vector2 pos);
 	int graph[8];
 	int flameGraph;
+	int drum;
+	int jan;
+	int okasiGraph[4];
 };
 
