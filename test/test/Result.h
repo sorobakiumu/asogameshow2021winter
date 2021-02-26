@@ -4,6 +4,7 @@
 #include <vector>
 #include <tuple>
 #include <string>
+#include <map>
 
 class Result :
     public BaseGame
@@ -19,5 +20,10 @@ private:
 	int flame;
 	int value(int& okasivalue,int& val);
 	std::vector<std::wstring> okasiList_;
+	int sum;
+	int number[10];
+	void numberDraw(int num, Vector2 pos);
+	int graph[8];
+	int flameGraph;
 };
 
