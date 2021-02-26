@@ -142,5 +142,6 @@ private:
 
 	int initflag;
 	int gcpsound;
+	int tcon_;
 };
 

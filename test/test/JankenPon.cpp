@@ -70,6 +70,7 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 		baseGame->Init();
 		StopSoundMem(gcpsound);
 	}
+	tcon_++;
 }
 
 void JankenPon::Draw(void)
@@ -130,6 +131,12 @@ void JankenPon::Draw(void)
 				DrawFormatString(x + 20, y + 20, 0xFFFFFF, L"%d　ポイント", res_);
 			}
 			DrawFormatString(x, y + 40, 0xFFFFFF, L"スペースキーを押してね");
+
+			if (tcon_ / 60 % 2 == 0)
+			{
+				lpImglMng.AddImg(L"Resource\\image/psb.png", Vector2(800 / 2, 600 / 2));
+				lpImglMng.AddImg(L"Resource\\image/ps.png", Vector2(800 / 2, 600 / 2));
+			}
 		}
 		break;
 	case FIN:
@@ -230,6 +237,7 @@ void JankenPon::Init(void)
 		tfile.close();
 	}
 	initflag = true;
+	tcon_ = 0;
 	LoadSoundMem(L"Resource\\music/gcp.mp3");
 }
 
