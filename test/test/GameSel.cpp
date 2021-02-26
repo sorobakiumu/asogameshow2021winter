@@ -34,6 +34,11 @@ void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 			baseGame = std::make_shared<WorldSoccer>();
 			baseGame->Init();
 		}
+		if (nowMowsGame_ == thisGameis::NOSELGAME)
+		{
+			baseGame = std::make_shared<Result>();
+			baseGame->Init();
+		}
 
 		//if (CheckHitKey(KEY_INPUT_1)) {
 		//	baseGame = std::make_shared<WorldSoccer>();
