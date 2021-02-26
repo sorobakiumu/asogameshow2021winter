@@ -3,6 +3,7 @@
 #include "WorldSoccer.h"
 #include "CarRace.h"
 #include "JankenPon.h"
+#include "Result.h"
 
 int gameselbgm;
 
@@ -25,8 +26,12 @@ void GameSel::Run(std::shared_ptr<BaseGame>& baseGame)
 		baseGame = std::make_shared<JankenPon>();
 		baseGame->Init();
 	}
+	if (CheckHitKey(KEY_INPUT_RETURN))
+	{
+		baseGame = std::make_shared<Result>();
+		baseGame->Init();
+	}
 	if (tmp != baseGame) {
-
 		StopSoundFile();
 		StopSoundMem(gameselbgm);
 	}

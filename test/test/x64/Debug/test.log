@@ -1,0 +1,51 @@
+﻿  BaseGame.cpp
+  CarRace.cpp
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\CarRace.cpp(115,6): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\CarRace.cpp(261,36): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  Coins.cpp
+  GameSel.cpp
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(30,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(31,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(33,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+  Geometry.cpp
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\Geometry.cpp(121,22): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  JankenPon.cpp
+  ImgMnj.cpp
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\mnj\ImgMnj.cpp(34,35): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\algorithm(308): message : コンパイル対象の関数 テンプレート インスタンス化 'auto ImgMnj::Draw::<lambda_1>::operator ()<std::pair<int,std::pair<Vector2,float>>>(_T1) const' のリファレンスを確認してください
+          with
+          [
+              _T1=std::pair<int,std::pair<Vector2,float>>
+          ]
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\mnj\ImgMnj.cpp(35): message : コンパイル対象の関数 テンプレート インスタンス化 '_Fn std::for_each<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>,ImgMnj::Draw::<lambda_1>>(_InIt,_InIt,_Fn)' のリファレンスを確認してください
+          with
+          [
+              _Fn=ImgMnj::Draw::<lambda_1>,
+              _Ty=std::pair<int,std::pair<Vector2,float>>,
+              _InIt=std::_Vector_iterator<std::_Vector_val<std::_Simple_types<std::pair<int,std::pair<Vector2,float>>>>>
+          ]
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\mnj\ImgMnj.cpp(34,28): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  masterMnj.cpp
+  EffekseerCtl.cpp
+  PadMng.cpp
+  SoundMnj.cpp
+  Result.cpp
+  Title.cpp
+  WorldSoccer.cpp
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(30,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(31,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(33,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.cpp(18,28): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.cpp(21,11): warning C4244: '=': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.cpp(146,76): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.cpp(157,40): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.cpp(160,37): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.cpp(161,30): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  ソース.cpp
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(30,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(31,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\WorldSoccer.h(33,28): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+  コードを生成中...
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\test\ソース.cpp(139): warning C4715: 'WinMain': 値を返さないコントロール パスがあります。
+LIBCMTD.lib(exe_main.obj) : error LNK2019: 未解決の外部シンボル main が関数 "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ) で参照されました
+C:\Users\Owner\Desktop\新しいフォルダー (3)\asogameshow2021winter\test\x64\Debug\test.exe : fatal error LNK1120: 1 件の未解決の外部参照
