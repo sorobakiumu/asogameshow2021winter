@@ -170,6 +170,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 								game_ = baseGame;
 								StopSoundFile();
 								StopSound();
+								gFcon = 1;
 							}
 							else
 							{
@@ -191,7 +192,7 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			{
 				if (!reseF)
 					lpImglMng.AddImg(L"Resource\\image/koukan.png", Vector2(800 - 32, 32));
-				else
+				else if (gFcon > 30)
 					lpImglMng.AddImg(L"Resource\\image/bat.png", Vector2(800 - 32, 32));
 
 				lpImglMng.AddImg(L"Resource\\image/car.png", Vector2(px + 16, py + 16));
