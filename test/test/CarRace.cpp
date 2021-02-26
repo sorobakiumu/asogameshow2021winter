@@ -72,6 +72,7 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 		baseGame->Init();
 		StopSoundMem(racebgm);
 	}
+	tcon_++;
 }
 
 void CarRace::Draw()
@@ -117,6 +118,12 @@ void CarRace::Draw()
 
 	if (bolls.empty()) {
 		lpImglMng.SetDrawBoxIm();
+
+		if (tcon_ / 60 % 2 == 0)
+		{
+			lpImglMng.AddImg(L"Resource\\image/onecoin.png", Vector2(800 / 2, 600 / 2));
+			lpImglMng.AddImg(L"Resource\\image/ps.png", Vector2(800 / 2, 600 / 2));
+		}
 		//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
 		//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
 		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -147,6 +154,7 @@ void CarRace::Init()
 
 	racebgm = LoadSoundMem(L"Resource\\music/car.mp3");
 	initflag = true;
+	tcon_++;
 }
 
 void CarRace::IsHit(std::shared_ptr<Boll>& boll, bool& balF)

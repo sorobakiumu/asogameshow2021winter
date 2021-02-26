@@ -35,5 +35,6 @@ private:
 	int score = 0;
 	int life = 5;
 	bool initflag;
+	int tcon_;
 };
 

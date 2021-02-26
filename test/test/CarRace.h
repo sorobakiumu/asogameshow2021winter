@@ -52,4 +52,5 @@ private:
 	bool balF = false;
 
 	bool initflag;
+	int tcon_;
 };

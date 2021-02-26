@@ -50,7 +50,7 @@ private:
 	static ImgMnj* sInstance;
 	std::vector < std::pair<int, std::pair<Vector2,float>> > drawListImg_;					//描画するものを溜めておくキュー（画像）
 	std::map<std::wstring, int> imgHMap_;
-	bool setDrawBoxF_;
+	//bool setDrawBoxF_;
 	
 
 	ImgMnj();

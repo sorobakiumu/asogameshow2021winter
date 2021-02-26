@@ -6,7 +6,7 @@ ImgMnj* ImgMnj::sInstance = nullptr;
 void ImgMnj::ResetD(void)
 {
 	drawListImg_.clear();
-	setDrawBoxF_ = false;
+	//setDrawBoxF_ = false;
 }
 
 void ImgMnj::AddImg(std::wstring que, Vector2 pos, float angle)
@@ -40,22 +40,24 @@ void ImgMnj::Draw(void)
 	//	float angle = dQue.second.second;
 	//	DxLib::DrawRotaGraph(pos.x, pos.y, 1.0f, angle, handle, true, false);
 	//}
-	if (setDrawBoxF_)
-	{
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
-		DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	}
+	//if (setDrawBoxF_)
+	//{
+	//	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+	//	DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
+	//	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	//}
 }
 
 void ImgMnj::SetDrawBoxIm()
 {
-	setDrawBoxF_ = true;
+	//setDrawBoxF_ = true;
+
+	lpImglMng.AddImg(L"Resource\\image/bcb.png", Vector2(800 / 2, 600 / 2));
 }
 
 ImgMnj::ImgMnj()
 {
-	setDrawBoxF_ = false;
+	//setDrawBoxF_ = false;
 	imgHMap_.clear();
 }
 

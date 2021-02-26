@@ -72,6 +72,8 @@ void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 			bolls.clear();
 		}
 	}
+
+	tcon_++;
 }
 
 void WorldSoccer::Draw()
@@ -113,7 +115,14 @@ void WorldSoccer::Draw()
 	lpImglMng.AddImg(L"Resource\\image/ga.png", Vector2(holl.x, holl.y));
 
 	if (!gamestart) {
+
 		lpImglMng.SetDrawBoxIm();
+
+		if (tcon_ / 60 % 2 == 0)
+		{
+			lpImglMng.AddImg(L"Resource\\image/onecoin.png", Vector2(800 / 2, 600 / 2));
+			lpImglMng.AddImg(L"Resource\\image/ps.png", Vector2(800 / 2, 600 / 2));
+		}
 		//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
 		//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
 		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -130,6 +139,7 @@ void WorldSoccer::Init()
 	holl.y = 490;
 	initflag = true;
 	soccerbgm = LoadSoundMem(L"Resource\\music/soccer.mp3");
+	tcon_ = 0;
 }
 
 void WorldSoccer::PinInit()
