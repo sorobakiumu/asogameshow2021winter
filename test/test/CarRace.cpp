@@ -36,14 +36,49 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 			balF = true;
 		}
 	}
-
+	spsF_.first = spsF_.second;
+ 	if (CheckHitKey(KEY_INPUT_SPACE))
+	{
+        spsF_.second = true;
+		powP_++;
+		if (powP_ > 100)
+			powP_ = 100;
+	}
+	else
+	{
+		spsF_.second = false;
+	}
+	if (!spsF_.first && !spsF_.second)
+		powP_ = 0;
 	oldkey = key;
 
 	//当たり判定
 	for (auto boll : bolls) {
-		boll->vec_.y += gravity;
+		if (!shotBF_)
+		{
+			boll->vec_.y += gravity;
+		}
 		IsHit(boll, balF);
 		//坂の当たり判定
+		bam(powP_);
+
+		if (static_cast<int>(shotOldPos_.x) > 800 / 2 + 150|| static_cast<int>(shotOldPos_.x) < 800 / 2 - 150)
+		{
+			if (static_cast<int>(shotOldPos_.x) == static_cast<int>(boll->pos_.x))
+			{
+				if (static_cast<int>(shotOldPos_.y) == static_cast<int>(boll->pos_.y))
+				{
+					shotBF_ = true;
+					if (boll->pos_.x > 800 / 2)
+						ShotLR_ = false;
+					else
+						ShotLR_ = true;
+				}
+			}
+		}
+		else
+			shotBF_ = false;
+		shotOldPos_ = boll->pos_;
 	}
 
 	//画面外防止
@@ -60,6 +95,7 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 		if (b->pos_.y > 600 || !b->alive) {
 			bolls.clear();
 			balF = false;
+			PlaySoundMem(folB_, DX_PLAYTYPE_BACK);
 		}
 	}
 
@@ -70,10 +106,18 @@ void CarRace::Run(std::shared_ptr<BaseGame>& baseGame)
 	//}
 
 	//シーン移行（デバッグ）
-	if (CheckHitKey(KEY_INPUT_5)) {
-		baseGame = std::make_shared<GameSel>();
-		baseGame->Init();
-		StopSoundMem(racebgm);
+	//if (CheckHitKey(KEY_INPUT_5)) 
+	int px, py;
+	GetMousePoint(&px, &py);
+
+	if (px >= 0 && px <= 64 && py >= 600 - 64 && py <= 600)
+	{
+		if (GetMouseInput() & MOUSE_INPUT_LEFT)
+		{
+			baseGame = std::make_shared<GameSel>();
+			baseGame->Init();
+			StopSoundMem(racebgm);
+		}
 	}
 	tcon_++;
 }
@@ -110,14 +154,16 @@ void CarRace::Draw()
 	//}
 
 	//ボールの描画
-	for (auto boll : bolls) {
+	for (auto boll : bolls) 
+	{
+		if (shotBF_ && !zff_)
+			lpImglMng.AddImg(L"Resource\\image/fir.png", Vector2(static_cast<int>(boll->pos_.x ), static_cast<int>(boll->pos_.y)), 0.0F, 1.0F * (powP_+40) / 100);
 		BollRadian(boll);
 		lpImglMng.AddImg(L"Resource\\image/coins.png", boll->pos_, boll->angle_);
 	}
 
 	//DrawFormatString(0, 0, 0xFFFFFF, L"ぱわー %3.3f ㌫ ", powP);
 	//ボールの更新
-	bam(powP);
 
 	if (bolls.empty()) {
 		lpImglMng.SetDrawBoxIm();
@@ -131,6 +177,7 @@ void CarRace::Draw()
 		//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
 		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+	lpImglMng.AddImg(L"Resource\\image/rsel.png", Vector2(32, 600 - 32));
 }
 
 void CarRace::Init()
@@ -156,9 +203,18 @@ void CarRace::Init()
 	};
 
 	racebgm = LoadSoundMem(L"Resource\\music/car.mp3");
+	golB_ = LoadSoundMem(L"Resource\\music/ジャン！.mp3");
+	folB_ = LoadSoundMem(L"Resource\\music/foll.mp3");
+
+	ChangeVolumeSoundMem(100, racebgm);
+
 	initflag = true;
 	tcon_++;
-	powP = 0;
+	powP_ = 0;
+	shotBF_ = false;
+	ShotLR_ = false;
+	spsF_.first = false;
+	spsF_.second = false;
 }
 
 void CarRace::IsHit(std::shared_ptr<Boll>& boll, bool& balF)
@@ -204,6 +260,7 @@ void CarRace::hollIsHit(std::shared_ptr<Boll>& boll, bool& balF)
 		{
 			boll->alive = false;
 			balF = false;
+			PlaySoundMem(folB_, DX_PLAYTYPE_BACK);
 		}
 	}
 }
@@ -251,6 +308,8 @@ void CarRace::GoalIsHit(std::shared_ptr<Boll>& boll)
 	{
 		Coins::GetInstance().kinken += 50;
 		boll->alive = false;
+
+		PlaySoundMem(golB_, DX_PLAYTYPE_BACK);
 	}
 }
 
@@ -276,84 +335,91 @@ void CarRace::gPosChange(std::shared_ptr<Boll>& boll, std::pair<Vector2, Vector2
 }
 void CarRace::bam(int pow)
 {
-	if (CheckHitKey(KEY_INPUT_UP))
-	{
-		powP += 0.5;
-		if (powP > 100)
-		{
-			powP = 100;
-		}
-		printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
-	}
-	if (CheckHitKey(KEY_INPUT_DOWN))
-	{
-		powP -= 0.5;
-		if (powP < 0)
-		{
-			powP = 0;
-		}
-		printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
-	}
+	//if (CheckHitKey(KEY_INPUT_UP))
+	//{
+	//	powP += 0.5;
+	//	if (powP > 100)
+	//	{
+	//		powP = 100;
+	//	}
+	//	printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
+	//}
+	//if (CheckHitKey(KEY_INPUT_DOWN))
+	//{
+	//	powP -= 0.5;
+	//	if (powP < 0)
+	//	{
+	//		powP = 0;
+	//	}
+	//	printf("ぱわぁぽいんと＝[%3.3f]\n", powP);
+	//}
 
 	for (auto b : bolls)
 	{
 		auto* ve = &b->vec_;
 
-		if (CheckHitKey(KEY_INPUT_Z) && !zff)
+		if (shotBF_&& !zff_)
 		{
-			auto hillflt = GetRadian(HillPositions[0]);
-			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			neuVec.x -= powP;
-			tvec.Normalized();
-			auto rtvec = RefLectVec(neuVec, tvec);
-			zff = true;
-			neuVec = rtvec / 10;
-			neuVec.x *= 2;
-			neuCon++;
-		}
-		else if (CheckHitKey(KEY_INPUT_X) && !zff)
-		{
-			auto hillflt = GetRadian(HillPositions[0]);
-			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			neuVec.x = -powP;
-			tvec.Normalized();
-			auto rtvec = RefLectVec(neuVec, tvec);
-			zff = true;
-			neuVec = rtvec / 10;
-			if (neuVec.x < 0)
-				neuVec.x *= -1;
-			neuVec.x *= 2;
-			neuCon++;
-		}
-		else if (CheckHitKey(KEY_INPUT_C) && !zff)
-		{
-			auto hillflt = GetRadian(HillPositions[0]);
-			Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
-			neuVec.y -= pow;
-			tvec.Normalized();
-			auto rtvec = RefLectVec(neuVec, tvec);
-			zff = true;
-			neuVec = rtvec / 10;
-			neuVec.x *= 2;
-			neuCon++;
-		}
-		else
-		{
-			if (neuCon == 0)
+			if (spsF_.first && !spsF_.second)
 			{
-				neuVec = { 0,0 };
-				zff = false;
-			}
-			else
-			{
-				if (neuCon / 2 < 5)
+				if(!ShotLR_)
 				{
-					*ve = neuVec;
-					neuCon++;
+					auto hillflt = GetRadian(HillPositions[0]);
+					Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
+					neuVec_.x -= pow;
+					tvec.Normalized();
+					auto rtvec = RefLectVec(neuVec_, tvec);
+					zff_ = true;
+					neuVec_ = rtvec / 10;
+					neuVec_.x *= 2;
+					neuCon_++;
 				}
 				else
 				{
-					neuCon = 0;
+					auto hillflt = GetRadian(HillPositions[0]);
+					Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
+					neuVec_.x = -pow;
+					tvec.Normalized();
+					auto rtvec = RefLectVec(neuVec_, tvec);
+					zff_ = true;
+					neuVec_ = rtvec / 10;
+					if (neuVec_.x < 0)
+						neuVec_.x *= -1;
+					neuVec_.x *= 2;
+					neuCon_++;
+				}
+			}
+			/*
+			else if (CheckHitKey(KEY_INPUT_C) && !zff)
+			{
+				auto hillflt = GetRadian(HillPositions[0]);
+				Vector2 tvec = { (static_cast<float>(sin(hillflt) * 0.1f)),(static_cast<float>(cos(hillflt) * 0.1f)) };
+				neuVec.y -= pow;
+				tvec.Normalized();
+				auto rtvec = RefLectVec(neuVec, tvec);
+				zff = true;
+				neuVec = rtvec / 10;
+				neuVec.x *= 2;
+				neuCon++;
+			}*/
+		}
+		else
+		{
+			if (neuCon_ == 0)
+			{
+				neuVec_ = { 0,0 };
+				zff_ = false;
+			}
+			else
+			{
+				if (neuCon_ / 2 < 5)
+				{
+					*ve = neuVec_;
+					neuCon_++;
+				}
+				else
+				{
+					neuCon_ = 0;
 				}
 			}
 		}

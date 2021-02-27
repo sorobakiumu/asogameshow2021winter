@@ -15,7 +15,7 @@ void Title::Run(std::shared_ptr<BaseGame>& baseGame)
 
 void Title::Draw()
 {
-	DrawFormatString(0, 0, 0xffffff, L"title");
+	//DrawFormatString(0, 0, 0xffffff, L"title");
 	//ÉQÅ[ÉÄÉGÉäÉAÇÃï`âÊ
 	lpImglMng.AddImg(L"Resource\\image/agemeronnV2.png", Vector2(800 / 2, 600 / 2));
 	
@@ -30,5 +30,6 @@ void Title::Draw()
 void Title::Init()
 {
 	tcon_ = 0;
-//	PlaySoundFile(L"Resource\\music/title.mp3", DX_PLAYTYPE_LOOP);
+
+	PlaySoundFile(L"Resource\\music/title.mp3", DX_PLAYTYPE_LOOP);
 }

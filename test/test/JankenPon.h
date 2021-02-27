@@ -123,6 +123,8 @@ private:
 	/// <param name=""></param>
 	void WinCheck(void);
 
+	void DrawOutPut(void);
+
 	NOWMODE nowmode_;		//いまのこのミニゲームでの状態
 	JANKENACTION youact_;	//プレイヤーが選んだ手
 	JANKENACTION myflg_;	//CPUくんが選んだ手
@@ -154,5 +156,9 @@ private:
 	bool dof_;
 
 	bool gameEndF_;
+
+	int drum_;
+	int jan_; 
+	int foll_; 
 };
 

@@ -28,5 +28,8 @@ private:
 	int drum;
 	int jan;
 	int okasiGraph[4];
+	std::vector<Vector2> okasiPos_;
+
+	int bgm_;
 };
 

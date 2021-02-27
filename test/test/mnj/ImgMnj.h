@@ -37,7 +37,7 @@ public:
 
 	void ResetD(void);
 
-	void AddImg(std::wstring que, Vector2 pos, float angle = 0);
+	void AddImg(std::wstring que, Vector2 pos, float angle = 0, float size = 1.0);
 
 
 	int GetGH(std::wstring que);
@@ -51,7 +51,7 @@ private:
 	std::vector < std::pair<int, std::pair<Vector2,float>> > drawListImg_;					//描画するものを溜めておくキュー（画像）
 	std::map<std::wstring, int> imgHMap_;
 	//bool setDrawBoxF_;
-	
+	std::vector<std::pair<int, float>> imgSize_;
 
 	ImgMnj();
 	~ImgMnj();

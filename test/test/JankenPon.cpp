@@ -11,6 +11,7 @@
 #include "Result.h"
 #include "mnj/ImgMnj.h"
 #include "Coins.h"
+#include "GameSel.h"
 
 JankenPon::JankenPon()
 {
@@ -80,8 +81,20 @@ void JankenPon::Run(std::shared_ptr<BaseGame>& baseGame)
 		break;
 	default:
 		break;
+	}	
+	int px, py;
+	GetMousePoint(&px, &py);
+
+	if (px >= 0 && px <= 64 && py >= 600 - 64 && py <= 600)
+	{
+		if (GetMouseInput() & MOUSE_INPUT_LEFT)
+		{
+			baseGame = std::make_shared<GameSel>();
+			baseGame->Init();
+			StopSoundMem(gcpsound);
+		}
 	}
-	if (CheckHitKey(KEY_INPUT_5) || gameEndF_)
+	if (gameEndF_)
 	{
 		baseGame = std::make_shared<Result>();
 		baseGame->Init();
@@ -149,6 +162,11 @@ void JankenPon::Draw(void)
 			{
 				DrawFormatString(x, y, 0xFFFFFF, L"ルーレット！");
 				DrawFormatString(x + 20, y + 20, 0xFFFFFF, L"%d　ポイント", res_);
+				DrawOutPut();
+				if (CheckSoundMem(drum_) != 1)
+				{
+					PlaySoundMem(drum_, DX_PLAYTYPE_BACK);
+				}
 			}
 		}
 		else
@@ -157,17 +175,32 @@ void JankenPon::Draw(void)
 			{
 				DrawFormatString(x, y, 0xFFFFFF, L"やったね！");
 				DrawFormatString(x + 20, y + 20, 0xFFFFFF, L"%d　ポイント", res_);
+
+				StopSoundMem(drum_);
+				PlaySoundMem(jan_, DX_PLAYTYPE_BACK);
+
+				if (tcon_ / 20 % 2 == 0)
+				{
+					DrawOutPut();
+				}
 			}
 			DrawFormatString(x, y + 40, 0xFFFFFF, L"スペースキーを押してね");
 
-			if (tcon_ / 60 % 2 == 0)
-			{
-				lpImglMng.AddImg(L"Resource\\image/psb.png", Vector2(800 / 2, 600 / 2));
-				lpImglMng.AddImg(L"Resource\\image/ps.png", Vector2(800 / 2, 600 / 2));
-			}
 		}
 		break;
 	case FIN:
+		if (tcon_ / 60 % 2 == 0)
+		{
+			lpImglMng.AddImg(L"Resource\\image/psb.png", Vector2(800 / 2, 600 / 2 + 70));
+			lpImglMng.AddImg(L"Resource\\image/ps.png", Vector2(800 / 2, 600 / 2 + 70));
+		}
+		if (gameflag_ == GameFlag::WINYOU_GF)
+		{
+			if (tcon_ / 20 % 2 == 0)
+			{
+				DrawOutPut();
+			}
+		}
 		break;
 	default:
 		break;
@@ -208,6 +241,7 @@ void JankenPon::Draw(void)
 	//}
 
 
+	lpImglMng.AddImg(L"Resource\\image/rsel.png", Vector2(32, 600 - 32));
 }
 
 void JankenPon::Init(void)
@@ -274,7 +308,11 @@ void JankenPon::Init(void)
 	}
 	initflag = true;
 	tcon_ = 0;
-	LoadSoundMem(L"Resource\\music/gcp.mp3");
+	gcpsound = LoadSoundMem(L"Resource\\music/gcp.mp3");
+	ChangeVolumeSoundMem(100, gcpsound);
+	drum_ = LoadSoundMem(L"Resource\\music/ドラムロール.mp3");
+	jan_ = LoadSoundMem(L"Resource\\music/ジャン！.mp3");
+	foll_ = LoadSoundMem(L"Resource\\music/foll.mp3");
 }
 
 void JankenPon::SetAct(void)
@@ -319,6 +357,7 @@ void JankenPon::StayMove(void)
 		}
 		if (youact_ != JANKENACTION::NO)
 		{
+			PlaySoundMem(foll_, DX_PLAYTYPE_BACK);
 			Coins::GetInstance().coins -= pMoney_;
 			gconf_ = true;
 			nowmode_ = NOWMODE::JANK;
@@ -352,6 +391,7 @@ void JankenPon::StayMove(void)
 		}
 		if (youact_ != JANKENACTION::NO)
 		{
+			PlaySoundMem(foll_, DX_PLAYTYPE_BACK);
 			SetFlg_ = false;
 			youact_ = JANKENACTION::NO;
 		}
@@ -363,21 +403,23 @@ void JankenPon::Finmove(void)
 	youact_ = JANKENACTION::NO;
 	myflg_ = JANKENACTION::NO;
 
-	//if (CheckHitKey(KEY_INPUT_SPACE))
-
-	if (Coins::GetInstance().coins <= 0)
+	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
-		gameEndF_ = true;
-	}
-	{
-		resconNum_ = 0;
-		resconF_ = false;
-		res_ = 0;
-		nextfindMove_ = 0;
-		gconf_ = false;
-		gcon_ = 0;
-		gameflag_ = GameFlag::no_Gf;
-		nowmode_ = NOWMODE::STAY;
+		PlaySoundMem(foll_, DX_PLAYTYPE_BACK);
+		if (Coins::GetInstance().coins <= 0)
+		{
+			gameEndF_ = true;
+		}
+		{
+			resconNum_ = 0;
+			resconF_ = false;
+			res_ = 0;
+			nextfindMove_ = 0;
+			gconf_ = false;
+			gcon_ = 0;
+			gameflag_ = GameFlag::no_Gf;
+			nowmode_ = NOWMODE::STAY;
+		}
 	}
 }
 
@@ -435,14 +477,14 @@ void JankenPon::ResultMove(void)
 	}
 	else
 	{
-		if (CheckHitKey(KEY_INPUT_SPACE))
+		//if (CheckHitKey(KEY_INPUT_SPACE))
 		{
 			if (gameflag_ == GameFlag::WINYOU_GF)
 			{
 				auto dat = static_cast<OUTPUTDAT>(res_);
 				if (dat == OUTPUTDAT::GOLD)
 				{
-					if (rand() % 100 != 0)
+					if (rand() % 60 != 0)
 					{
 						res_ = 2;
 						dat = OUTPUTDAT::Three1P;
@@ -450,7 +492,7 @@ void JankenPon::ResultMove(void)
 				}
 				if (dat == OUTPUTDAT::ElevenP)
 				{
-					if (rand() % 50 != 0)
+					if (rand() % 30 != 0)
 					{
 						res_ = 8;
 						dat = OUTPUTDAT::Three2P;
@@ -459,7 +501,7 @@ void JankenPon::ResultMove(void)
 				switch (dat)
 				{
 				case OUTPUTDAT::GOLD:
-					Coins::GetInstance().kinken++;
+					Coins::GetInstance().kinken += 100 * pMoney_;
 					break;
 				case OUTPUTDAT::Three1P:
 					Coins::GetInstance().coins += pMoney_ * 3;
@@ -510,6 +552,7 @@ void JankenPon::ResultMove(void)
 
 void JankenPon::WinCheck(void)
 {
+	PlaySoundMem(jan_, DX_PLAYTYPE_BACK);
 	if (youact_ == JANKENACTION::GU)
 	{
 		if (myflg_ == JANKENACTION::GU)
@@ -554,6 +597,54 @@ void JankenPon::WinCheck(void)
 		{
 			gameflag_ = GameFlag::DRAW_GF;
 		}
+	}
+}
+
+void JankenPon::DrawOutPut(void)
+{
+	auto dat = static_cast<OUTPUTDAT>(res_);
+
+	//185 193
+	switch (dat)
+	{
+	case OUTPUTDAT::GOLD:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2+20, 600 / 2 - 162));
+		break;
+	case OUTPUTDAT::Three1P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 + 77+20, 600 / 2 - 127-5));
+		break;
+	case OUTPUTDAT::Seven1P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 + 130+30, 600 / 2 - 70));
+		break;
+	case OUTPUTDAT::One1P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 + 172, 600 / 2));
+		break;
+	case OUTPUTDAT::Five1P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 + 130+30, 600 / 2 + 70));
+		break;
+	case OUTPUTDAT::Two1P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 + 77+20, 600 / 2 + 127));
+		break;
+	case OUTPUTDAT::ElevenP:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2+20, 600 / 2 + 162));
+		break;
+	case OUTPUTDAT::Three2P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 - 77, 600 / 2 + 127));
+		break;
+	case OUTPUTDAT::Seven2P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 - 130, 600 / 2 + 70));
+		break;
+	case OUTPUTDAT::One2P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 - 160+10, 600 / 2));
+		break;
+	case OUTPUTDAT::Five2P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 - 130, 600 / 2 - 70));
+		break;
+	case OUTPUTDAT::Two2P:
+		lpImglMng.AddImg(L"Resource\\image/hitt.png", Vector2(800 / 2 - 77+5, 600 / 2 - 127-5));
+		break;
+	default:
+		break;
 	}
 }
 

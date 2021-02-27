@@ -4,6 +4,7 @@
 #include "Coins.h"
 #include <assert.h>
 #include "mnj/ImgMnj.h"
+#include "mnj/masterMnj.h"
 
 void Result::Run(std::shared_ptr<BaseGame>& baseGame)
 {
@@ -13,11 +14,23 @@ void Result::Run(std::shared_ptr<BaseGame>& baseGame)
 	}
 	flame++;
 	if (flame == 10) {
-		PlaySoundMem(drum,DX_PLAYTYPE_BACK);
+		PlaySoundMem(drum, DX_PLAYTYPE_BACK);
 	}
 	if (flame == 240) {
 		StopSoundMem(drum);
 		PlaySoundMem(jan, DX_PLAYTYPE_BACK);
+		PlaySoundMem(bgm_, DX_PLAYTYPE_BACK);
+	}
+	if (flame >= 240)
+	{
+		for (int i = 0; i < okasiPos_.size(); i++)
+		{
+			okasiPos_[i].y += 1;
+
+			okasiPos_[i].x -= 0.5;
+			if (okasiPos_[i].y > 620 || okasiPos_[i].x < -300)
+				okasiPos_[i] = Vector2(rand() % 800, 0);
+		}
 	}
 }
 
@@ -29,6 +42,30 @@ void Result::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	DrawBox(0, 0, 800, 600, GetColor(0, 0, 0), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (flame >= 240)
+	{
+		int tcon = 0;
+		for (int a = 0; a < okasi[0]; a++)
+		{
+			DrawGraph(okasiPos_[tcon].x, okasiPos_[tcon].y, okasiGraph[0], true);
+			tcon++;
+		}
+		for (int a = 0; a < okasi[1]; a++)
+		{
+			DrawGraph(okasiPos_[tcon].x, okasiPos_[tcon].y, okasiGraph[1], true);
+			tcon++;
+		}
+		for (int a = 0; a < okasi[2]; a++)
+		{
+			DrawGraph(okasiPos_[tcon].x, okasiPos_[tcon].y, okasiGraph[2], true);
+			tcon++;
+		}
+		for (int a = 0; a < okasi[3]; a++)
+		{
+			DrawGraph(okasiPos_[tcon].x, okasiPos_[tcon].y, okasiGraph[3], true);
+			tcon++;
+		}
+	}
 	DrawRotaGraph(400,300,0.8,0.0,flameGraph,true);
 	DrawGraph(250, 110, graph[0], true);
 
@@ -72,11 +109,13 @@ void Result::Draw()
 
 void Result::Init()
 {
+	InitSoundMem();
+	srand(static_cast<unsigned int>(time(NULL)));
 	valueTable[0] = 200;
 	valueTable[1] = 100;
 	valueTable[2] = 10;
 	valueTable[3] = 5;
-
+	LpMastMng.resultF_ = true;
 	for (auto oka : okasi) {
 		oka = 0;
 	}
@@ -90,40 +129,49 @@ void Result::Init()
 	for (int n = 0; n < 4; n++) {
 		okasi[n] = value(valueTable[n], kinken);
 	}
-
+	int y = -400;
+	for (auto ok : okasi)
+	{
+		for (int co = 0; co < ok; co++)
+		{
+			okasiPos_.emplace_back(Vector2(rand() % 800, y));
+			y += 10;
+		}
+	}
 	flame = 0;
 	sum = 0;
 	for (int n = 0; n < 4; n++) {
 		sum += valueTable[n] * okasi[n];
 	}
-	flameGraph = LoadGraph(L"Resource/image/フレーム.png");
-	number[0] = LoadGraph(L"Resource/image/0.png");
-	number[1] = LoadGraph(L"Resource/image/1.png");
-	number[2] = LoadGraph(L"Resource/image/2.png");
-	number[3] = LoadGraph(L"Resource/image/3.png");
-	number[4] = LoadGraph(L"Resource/image/4.png");
-	number[5] = LoadGraph(L"Resource/image/5.png");
-	number[6] = LoadGraph(L"Resource/image/6.png");
-	number[7] = LoadGraph(L"Resource/image/7.png");
-	number[8] = LoadGraph(L"Resource/image/8.png");
-	number[9] = LoadGraph(L"Resource/image/9.png");
+	flameGraph = LoadGraph(L"Resource\\image/フレーム.png");
+	number[0] = LoadGraph(L"Resource\\image/0.png");
+	number[1] = LoadGraph(L"Resource\\image/1.png");
+	number[2] = LoadGraph(L"Resource\\image/2.png");
+	number[3] = LoadGraph(L"Resource\\image/3.png");
+	number[4] = LoadGraph(L"Resource\\image/4.png");
+	number[5] = LoadGraph(L"Resource\\image/5.png");
+	number[6] = LoadGraph(L"Resource\\image/6.png");
+	number[7] = LoadGraph(L"Resource\\image/7.png");
+	number[8] = LoadGraph(L"Resource\\image/8.png");
+	number[9] = LoadGraph(L"Resource\\image/9.png");
 
-	graph[0] = LoadGraph(L"Resource/image/結果.png");
-	graph[1] = LoadGraph(L"Resource/image/スカイクッキー.png");
-	graph[2] = LoadGraph(L"Resource/image/コーンソード.png");
-	graph[3] = LoadGraph(L"Resource/image/うまか棒.png");
-	graph[4] = LoadGraph(L"Resource/image/トロルチョコ.png");
-	graph[5] = LoadGraph(L"Resource/image/合計.png");
-	graph[6] = LoadGraph(L"Resource/image/円分買いました.png");
-	graph[7] = LoadGraph(L"Resource/image/個.png");
+	graph[0] = LoadGraph(L"Resource\\image/結果.png");
+	graph[1] = LoadGraph(L"Resource\\image/スカイクッキー.png");
+	graph[2] = LoadGraph(L"Resource\\image/コーンソード.png");
+	graph[3] = LoadGraph(L"Resource\\image/うまか棒.png");
+	graph[4] = LoadGraph(L"Resource\\image/トロルチョコ.png");
+	graph[5] = LoadGraph(L"Resource\\image/合計.png");
+	graph[6] = LoadGraph(L"Resource\\image/円分買いました.png");
+	graph[7] = LoadGraph(L"Resource\\image/個.png");
 
-	okasiGraph[0] = LoadGraph(L"Resource/image/pk1.png");
-	okasiGraph[1] = LoadGraph(L"Resource/image/pk2.png");
-	okasiGraph[2] = LoadGraph(L"Resource/image/pk3.png");
-	okasiGraph[3] = LoadGraph(L"Resource/image/pk4.png");
+	okasiGraph[0] = LoadGraph(L"Resource\\image/pk1.png");
+	okasiGraph[1] = LoadGraph(L"Resource\\image/pk2.png");
+	okasiGraph[2] = LoadGraph(L"Resource\\image/pk3.png");
+	okasiGraph[3] = LoadGraph(L"Resource\\image/pk4.png");
 
-	drum = LoadSoundMem(L"Resource/music/ドラムロール.mp3");
-	jan = LoadSoundMem(L"Resource/music/ジャン！.mp3");
+	bgm_ = LoadSoundMem(L"Resource\\music/title.mp3");
+	drum = LoadSoundMem(L"Resource\\music/ドラムロール.mp3");
+	jan = LoadSoundMem(L"Resource\\music/ジャン！.mp3");
 }
 
 int Result::value(int& okasivalue, int& val)

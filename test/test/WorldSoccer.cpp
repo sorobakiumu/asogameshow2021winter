@@ -50,10 +50,17 @@ void WorldSoccer::Run(std::shared_ptr<BaseGame>& baseGame)
 			}
 		}
 	}
-	if (CheckHitKey(KEY_INPUT_5)) {
-		baseGame = std::make_shared<GameSel>();
-		baseGame->Init();
-		StopSoundMem(soccerbgm);
+	int px, py;
+	GetMousePoint(&px, &py);
+
+	if (px >= 0 && px <= 64 && py >= 600 - 64 && py <= 600)
+	{
+		if (GetMouseInput() & MOUSE_INPUT_LEFT)
+		{
+			baseGame = std::make_shared<GameSel>();
+			baseGame->Init();
+			StopSoundMem(soccerbgm);
+		}
 	}
 	if (life <= 0&&gamestart) {
 		gamestart = false;
@@ -127,9 +134,15 @@ void WorldSoccer::Draw()
 		//DrawBox(800 / 2 - 200, 0, 800 / 2 + 200, 600, GetColor(0, 0, 0), TRUE);
 		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
-
-	DrawFormatString(0, 0, 0xffffff, L"スコア　%d", score);
-	DrawFormatString(0, 20, 0xffffff, L"ライフ　%d", life);
+	int txpo = 0;
+	for (int i = 0; i < life; i++)
+	{
+		lpImglMng.AddImg(L"Resource\\image/H.png", Vector2(800/2 - 175 + txpo, 30));
+		txpo += 50;
+	}
+	//DrawFormatString(0, 0, 0xffffff, L"スコア　%d", score);
+	//DrawFormatString(0, 20, 0xffffff, L"ライフ　%d", life);
+	lpImglMng.AddImg(L"Resource\\image/rsel.png", Vector2(32, 600 - 32));
 }
 
 void WorldSoccer::Init()
@@ -139,6 +152,7 @@ void WorldSoccer::Init()
 	holl.y = 490;
 	initflag = true;
 	soccerbgm = LoadSoundMem(L"Resource\\music/soccer.mp3");
+	ChangeVolumeSoundMem(100, soccerbgm);
 	tcon_ = 0;
 }
 

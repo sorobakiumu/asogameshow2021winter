@@ -15,6 +15,7 @@
 #include "mnj/masterMnj.h"
 #include "mnj/ImgMnj.h"
 #include "Result.h"
+#include "resource.h"
 
 namespace {
 	std::shared_ptr<BaseGame> game_;
@@ -28,11 +29,14 @@ namespace {
 
 int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int) 
 {
+	SetDXArchiveKeyString(L"36agemeronpan");
 	DxLib::ChangeWindowMode(true);
 	DxLib::SetGraphMode(800, 600, 0, 0);
 	// DirectX11を使用するようにする。(DirectX9も可、一部機能不可)
 	// Effekseerを使用するには必ず設定する。
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
+	DxLib::SetMainWindowText(L"駄菓子屋あげめろん");
+	DxLib::SetWindowIconID(IDI_ICON1);
 
 	// DXライブラリを初期化する。
 	if (DxLib_Init() == -1)
@@ -71,9 +75,10 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 	oldgame_ = game_;
 	//SetBackgroundColor(255, 255, 255);
 
-	SetDXArchiveKeyString(L"36agemeronpan");
 	int transSE = LoadSoundMem(L"Resource\\music/trans.mp3");
+
 	//ChangeVolumeSoundMem(100, transSE);
+	ChangeVolumeSoundMem(255*70/100, transSE);
 	LpMastMng;
 
 	bool resbotom = false;
@@ -97,10 +102,13 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			if (transflame < maxtrans / 2) {
 				LpMastMng.Run();
 				screen_->Draw();
+				lpImglMng.AddImg(L"Resource\\image/stbs.png", Vector2(800 / 2, 600 / 2));
+				lpImglMng.AddImg(L"Resource\\image/coins.png", Vector2(25, 50));
+				lpImglMng.AddImg(L"Resource\\image/goldc.png", Vector2(25, 100));
 				LpMastMng.Draw();
-				DrawFormatString(0, 50, 0xffffff, L"coins = %d枚", Coins::GetInstance().coins);
-				DrawFormatString(0, 70, 0xffffff, L"ticket = %d円分", Coins::GetInstance().kinken);
-				DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
+				DrawFormatString(25, 50, 0xffffff, L"    = %d枚", Coins::GetInstance().coins);
+				DrawFormatString(25, 100, 0xffffff, L"    = %d円分", Coins::GetInstance().kinken);
+				//DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, transflame*4);
 				DrawBox(0, 0, 800, 600, GetColor(255, 255, 255), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -108,10 +116,13 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 			else if (transflame >= maxtrans / 2) {
 				LpMastMng.Run();
 				game_->Draw();
+				lpImglMng.AddImg(L"Resource\\image/stbs.png", Vector2(800 / 2, 600 / 2));
+				lpImglMng.AddImg(L"Resource\\image/coins.png", Vector2(25, 50));
+				lpImglMng.AddImg(L"Resource\\image/goldc.png", Vector2(25, 100));
 				LpMastMng.Draw();
-				DrawFormatString(0, 50, 0xffffff, L"coins = %d枚", Coins::GetInstance().coins);
-				DrawFormatString(0, 70, 0xffffff, L"ticket = %d円分", Coins::GetInstance().kinken);
-				DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
+				DrawFormatString(25, 50, 0xffffff, L"    = %d枚", Coins::GetInstance().coins);
+				DrawFormatString(25, 100, 0xffffff, L"    = %d円分", Coins::GetInstance().kinken);
+				//DrawFormatString(0, 100, 0xffffff, L"flame = %d", transflame);
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255-(transflame-maxtrans/2)*4);
 				DrawBox(0, 0, 800, 600, GetColor(255, 255, 255), TRUE);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -200,10 +211,16 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR, int)
 					lpImglMng.AddImg(L"Resource\\image/bat.png", Vector2(800 - 32, 32));
 
 				lpImglMng.AddImg(L"Resource\\image/car.png", Vector2(px + 16, py + 16));
+				lpImglMng.AddImg(L"Resource\\image/stbs.png", Vector2(800/2, 600/2));
+				lpImglMng.AddImg(L"Resource\\image/coins.png", Vector2(25, 50));
+				lpImglMng.AddImg(L"Resource\\image/goldc.png", Vector2(25, 100));
 			}
 			LpMastMng.Draw();
-			DrawFormatString(0, 50, 0xffffff, L"coins = %d枚", Coins::GetInstance().coins);
-			DrawFormatString(0, 70, 0xffffff, L"ticket = %d円分", Coins::GetInstance().kinken);
+			if (gFcon != 0)
+			{
+				DrawFormatString(25, 50, 0xffffff, L"    = %d枚", Coins::GetInstance().coins);
+				DrawFormatString(25, 100, 0xffffff, L"    = %d円分", Coins::GetInstance().kinken);
+			}
 		}
 		if (oldgame_ != game_) {
 			trans = true;

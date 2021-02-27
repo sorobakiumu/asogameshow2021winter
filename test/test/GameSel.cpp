@@ -102,6 +102,7 @@ void GameSel::Init()
 {
 	if (!CheckSoundFile()) {
 		gameselbgm = LoadSoundMem(L"Resource\\music/title.mp3");
+		ChangeVolumeSoundMem(100, gameselbgm);
 	}
 	initflag = true;
 	mousePos_ = {0,0};

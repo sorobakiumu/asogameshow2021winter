@@ -30,10 +30,10 @@ private:
 	std::vector<std::shared_ptr<Boll>> bolls;
 	const float xoffset = 200;
 	const float xgameScreen = 400;
-	bool zff = false;			//球つきフラグ
-	Vector2 neuVec = { 0,0 };	//フレーム毎の移動量
-	int neuCon = 0;				//玉つき用のカウント
-	float powP = 40;			//たまつきのパワー変数
+	bool zff_ = false;			//球つきフラグ
+	Vector2 neuVec_ = { 0,0 };	//フレーム毎の移動量
+	int neuCon_ = 0;				//玉つき用のカウント
+	float powP_;			//たまつきのパワー変数
 
 	/// <summary>
 	/// 球をつくための関数
@@ -53,4 +53,14 @@ private:
 
 	bool initflag;
 	int tcon_;
+
+	Vector2 shotOldPos_;
+
+	std::pair<bool,bool> spsF_;
+
+	bool shotBF_;
+	bool ShotLR_; //false = l : true = r
+
+	int golB_;
+	int folB_;
 };
